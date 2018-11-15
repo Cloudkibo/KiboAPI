@@ -62,16 +62,16 @@ module.exports = function (app, httpapp, config) {
   require('./socketio').setup(socket)
 
   server.listen(config.port, config.ip, () => {
-    logger.serverLog(TAG, `KiboPush server STARTED on ${
+    console.log(`KiboAPI server STARTED on ${
       config.port} in ${config.env} mode`)
   })
 
   httpsServer.listen(config.secure_port, () => {
-    logger.serverLog(TAG, `KiboPush server STARTED on ${
+    console.log(`KiboAPI server STARTED on ${
       config.secure_port} in ${config.env} mode`)
   })
 
   if (config.env === 'production' || config.env === 'staging') {
-    console.log('KiboPush server STARTED on %s in %s mode', config.port, config.env)
+    console.log('KiboAPI server STARTED on %s in %s mode', config.port, config.env)
   }
 }

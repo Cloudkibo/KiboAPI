@@ -14,8 +14,6 @@ const Permissions = require('../api/v1/permissions/permissions.model')
 const ApiSettings = require('../api/v1/api_settings/api_settings.model')
 const validateJwt = expressJwt({secret: config.secrets.session})
 const needle = require('needle')
-const Pages = require('../api/v1/pages/Pages.model')
-const CompanyUsers = require('../api/v1/companyuser/companyuser.model')
 const _ = require('lodash')
 
 // const PassportFacebookExtension = require('passport-facebook-extension')

@@ -7,7 +7,7 @@
 module.exports = {
   // MySQL connection options
   mongo: {
-    uri: process.env.MONGO_URI || 'mongodb://localhost/kibopush-prod'
+    uri: process.env.MONGO_URI || 'mongodb://localhost/kiboapi-prod'
   },
   seedDB: false,
 
