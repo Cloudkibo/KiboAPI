@@ -2,6 +2,5 @@
 # This will install all the required libraries.
 git pull origin master
 npm install
-npm run build:client
-forever stop server/app.js
-forever start server/app.js
+npm run stop:prod
+npm run start:prod

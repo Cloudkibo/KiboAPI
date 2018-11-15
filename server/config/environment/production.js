@@ -1,19 +1,9 @@
-/**
- * Created by sojharo on 24/07/2017.
- */
-
 // Production specific configuration
 // ==================================
 module.exports = {
-  // MySQL connection options
+  // MongoDB connection options
   mongo: {
-    uri: process.env.MONGO_URI || 'mongodb://localhost/kiboapi-prod'
+    uri: process.env.MONGO_URI || 'mongodb://localhost/KiboAPI-prod'
   },
-  seedDB: false,
-
-  facebook: {
-    clientID: process.env.FACEBOOK_ID,
-    clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: `${process.env.DOMAIN}/auth/facebook/callback`
-  }
+  seedDB: false
 }
