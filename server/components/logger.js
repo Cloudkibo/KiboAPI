@@ -1,7 +1,7 @@
 const config = require('../config/environment/index')
 
 exports.serverLog = function (label, data) {
-  const namespace = `DemoApp:${label}`
+  const namespace = `KiboAPI:${label}`
   const debug = require('debug')(namespace)
 
   if (config.env === 'development' || config.env === 'test') {
@@ -12,7 +12,7 @@ exports.serverLog = function (label, data) {
 }
 
 exports.clientLog = function (label, data) {
-  const namespace = `DemoApp:client:${label}`
+  const namespace = `KiboAPI:client:${label}`
   const debug = require('debug')(namespace)
 
   if (config.env === 'development' || config.env === 'test') {
