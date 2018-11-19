@@ -31,7 +31,7 @@ module.exports = function (app) {
 
   // app.use(favicon(path.join(config.root, 'client', 'favicon.ico')))
 
-  app.set('views', path.join(config.root, 'client'))
+  app.set('views', path.join(config.root, 'views'))
   app.set('view engine', 'pug')
 
   // Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
