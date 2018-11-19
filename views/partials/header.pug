@@ -1,12 +1,9 @@
-//
-   Created by sojharo on 24/04/2018.
-
 doctype html
 html(lang="en")
   head
     meta(charset="utf-8")
     title
-      | KiboPush | Sign In
+      | KiboAPI
     meta(name="description" content="Latest updates and statistic charts")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
@@ -15,25 +12,6 @@ html(lang="en")
       window.__url_staging = "https://skiboapi.cloudkibo.com";
       window.__url_development = "http://localhost:8000";
     script(src="https://cdn.cloudkibo.com/public/scripts/kiboAuth.js")
-    //- script(type='text/javascript').
-    //-   window.__kibo_company_id = "5a71705eae76a333430b9f15";
-    //-   document.addEventListener("DOMContentLoaded", function () {
-    //-     console.log('running script')
-    //-     var wa = document.createElement('script');
-    //-     wa.type = 'text/javascript';
-    //-     wa.async = true;
-    //-     wa.src = 'https://cdn.cloudkibo.com/public/scripts/widgetAppSrc.js';
-    //-     var s = document.getElementsByTagName('script')[0];
-    //-     s.parentNode.insertBefore(wa, s);
-    //-     setTimeout(function() {
-    //-       console.log(window.__infoPayload)
-    //-       let plugin = document.getElementsByClassName('fb-customerchat')[0]
-    //-       plugin.setAttribute('ref', JSON.stringify(window.__infoPayload))
-    //-       console.log(plugin)
-    //-       // document.body.appendChild(plugin);
-    //-     }, 5000)
-    //-   });
-    // script(src="https://kibopush-sojharo.ngrok.io/scripts/widgetAppSrc.js" type="text/javascript")
     // begin::Web font
     // Facebook Pixel Code
     script.
@@ -87,7 +65,7 @@ html(lang="en")
       // Emoji Mart CSS
       link(href="https://cdn.cloudkibo.com/public/assets/Emoji/picker.css" rel="stylesheet" type="text/css")
       // Dashboard custom CSS
-      link(href="https://cdn.cloudkibo.com/public/assets/dashboard/dashboard.css" rel="stylesheet" type="text/css")
+      // link(href="https://cdn.cloudkibo.com/public/assets/dashboard/dashboard.css" rel="stylesheet" type="text/css")
     if environment !== 'development'
       link(href="https://cdn.cloudkibo.com/public/dist/kibopush.min.css" rel="stylesheet" type="text/css")
       // end::Page Vendors
@@ -128,23 +106,7 @@ html(lang="en")
   // end::Head
   body.m-page--fluid.m--skin-.m-content--skin-light2.m-aside-left--fixed.m-header--fixed.m-header--fixed-mobile.m-aside-left--enabled.m-aside-left--skin-dark.m-aside-left--offcanvas.m-footer--push.m-aside--offcanvas-default
     #content.m-grid.m-grid--hor.m-grid--root.m-page
-    //- script.
-    //-   window.fbAsyncInit = function () {
-    //-     FB.init({
-    //-       appId: '132767517443810',
-    //-       autoLogAppEvents: true,
-    //-       xfbml: true,
-    //-       version: 'v2.12',
-    //-     })
-    //-   };
-    //-   (function (d, s, id) {
-    //-     var js, fjs = d.getElementsByTagName(s)[0]
-    //-     if (d.getElementById(id)) {return}
-    //-     js = d.createElement(s)
-    //-     js.id = id
-    //-     js.src = 'https://connect.facebook.net/en_US/sdk.js'
-    //-     fjs.parentNode.insertBefore(js, fjs)
-    //-   }(document, 'script', 'facebook-jssdk'))
+      block content
     if environment === 'production'
       script(src="https://cdn.ravenjs.com/3.22.3/raven.min.js" crossorigin="anonymous")
       script.
@@ -164,33 +126,6 @@ html(lang="en")
             }
           }).install()
           }
-    script(src="https://cdn.cloudkibo.com/public/bundle.js")
-    // Js effects for material design. + Tooltips
-    // <script src="https://cdn.cloudkibo.com/public/js/material.min.js"></script>
-    // Helper scripts (Tabs, Equal height, Scrollbar, etc)
-    // <script src="https://cdn.cloudkibo.com/public/js/theme-plugins.js"></script>
-    // Init functions
-    // <script src="https://cdn.cloudkibo.com/public/js/main.js"></script>
-    // Load more news AJAX script
-    // <script src="https://cdn.cloudkibo.com/public/js/ajax-pagination.js"></script>
-    // Select / Sorting script
-    // <script src="https://cdn.cloudkibo.com/public/js/selectize.min.js"></script>
-    // Datepicker input field script
-    // <script src="https://cdn.cloudkibo.com/public/js/moment.min.js"></script>
-    // <script src="https://cdn.cloudkibo.com/public/js/daterangepicker.min.js"></script>
-    // Lightbox plugin script
-    // <script src="https://cdn.cloudkibo.com/public/js/jquery.magnific-popup.min.js"></script>
-    // Widget with events script
-    // <script src="https://cdn.cloudkibo.com/public/js/simplecalendar.js"></script>
-    //
-      <script src="https://cdn.cloudkibo.com/public/js/mediaelement-and-player.min.js"></script>
-      <script src="https://cdn.cloudkibo.com/public/js/mediaelement-playlist-plugin.min.js"></script>
-    // Chart JS Generate scripts
-    //
-      <script src="https://cdn.cloudkibo.com/public/js/Chart.min.js"></script>
-      <script src="https://cdn.cloudkibo.com/public/js/chartjs-plugin-deferred.min.js"></script>
-      <script src="https://cdn.cloudkibo.com/public/js/circle-progress.min.js"></script>
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     // begin::Quick Nav
     // begin::Base Scripts
     script(src="https://cdn.cloudkibo.com/public/assets/vendors/base/vendors.bundle.js" type="text/javascript")
@@ -199,6 +134,3 @@ html(lang="en")
     // begin::Page Vendors
     script(src="https://cdn.cloudkibo.com/public/assets/vendors/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript")
     // end::Page Vendors
-    // begin::Page Snippets
-    script(src="https://cdn.cloudkibo.com/public/assets/app/js/dashboard.js" type="text/javascript")
-    // end::Page Snippets
