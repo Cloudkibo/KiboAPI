@@ -1,11 +1,8 @@
 const requestPromise = require('request-promise')
 const config = require('../../../config/environment/index')
-const logger = require('../../../components/logger')
-const TAG = 'api/v2/utility/index.js'
-const util = require('util')
 
 exports.callApi = (endpoint, method = 'get', body, token, type = 'accounts') => {
-  let headers = {}
+  let headers
   if (token) {
     headers = {
       'content-type': 'application/json',
@@ -17,18 +14,22 @@ exports.callApi = (endpoint, method = 'get', body, token, type = 'accounts') => 
       'is_kibo_product': true
     }
   }
-  let uri = config.API_URL_ACCOUNTS
-
+  let apiUrl = config.ACCOUNTS_URL
+  if (type === 'kiboengage') {
+    apiUrl = config.KIBOENGAGE_URL
+  } else if (type === 'kibochat') {
+    apiUrl = config.KIBOCHAT_URL
+  }
   let options = {
     method: method.toUpperCase(),
-    uri: `${uri}/${endpoint}`,
+    uri: `${apiUrl}${endpoint}`,
     headers,
     body,
     json: true
   }
-  logger.serverLog(TAG, `requestPromise body ${util.inspect(body)}`)
+  // logger.serverLog(TAG, `requestPromise body ${util.inspect(body)}`)
   return requestPromise(options).then(response => {
-    logger.serverLog(TAG, `response from accounts ${util.inspect(response)}`)
+    // logger.serverLog(TAG, `response from accounts ${util.inspect(response)}`)
     return new Promise((resolve, reject) => {
       if (response.status === 'success') {
         resolve(response.payload)
