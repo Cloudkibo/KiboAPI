@@ -22,7 +22,14 @@ module.exports = function (app) {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
     // res.sendFile(path.join(config.root, 'client/index.html'))
-    res.render('main', { environment: env })
+    res.render('pages/index', { environment: env })
+  })
+
+  app.get('/product', (req, res) => {
+    res.cookie('environment', config.env,
+      {expires: new Date(Date.now() + 900000)})
+    // res.sendFile(path.join(config.root, 'client/index.html'))
+    res.render('pages/productAccess')
   })
 
   app.get('/', (req, res) => {
