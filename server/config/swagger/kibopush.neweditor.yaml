@@ -172,6 +172,11 @@ paths:
           description: The locale of the subscribers
           type: string
           required: false
+        - name: segmentationTags
+          in: formData
+          description: The tags of the subscribers
+          type: string
+          required: false
         - name: isActive
           in: formData
           description: Whether this autoposting is enabled or not
@@ -216,31 +221,6 @@ paths:
               status:
                 type: string
                 description: success
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-
-  /autoposting_messages/:id:
-    get:
-      description: Gets a particular autoposting message
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                description: success
-              payload:
-                type: object
-                $ref: '#/definitions/Autoposting_Message'
-                description: autoposting message data
         '500':
           description: failed
           schema:
@@ -297,7 +277,7 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response404'
-             
+
   /abandonedCarts/getStores:
     get:
       description: Gives all the stores created by the logged in user
@@ -327,7 +307,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/Response404'
-            
+
   /abandonedCarts/abandonedCheckouts:
     get:
       description: Gives all the Abandoned Checkouts
@@ -400,7 +380,7 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-            
+
   /abandonedCarts/saveCartInfo:
     post:
       description: Stores the Cart Info of the Cart
@@ -448,7 +428,7 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-             
+
   /abandonedCarts/saveCheckoutInfo:
     post:
       description: Stores the Checkout Info of the abandoned Checkout
@@ -575,7 +555,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/Response400'
-            
+
   /abandonedCarts/deleteOneCartInfo:
     post:
       description: Delete One Cart of the store
@@ -612,7 +592,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/Response400'
-            
+
   /abandonedCarts/deleteCheckoutInfo:
     post:
       description: Delete One Checkout of the store
@@ -644,7 +624,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/Response400'
-            
+
   /abandonedCarts/deleteAllInfo:
     get:
       description: Delete All information of Shopify
@@ -677,7 +657,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/Response404'
-            
+
   /abandonedCarts/sendCheckout:
     post:
       description: Send the Abandoned Cart Immediately
@@ -701,7 +681,7 @@ paths:
               status:
                type: string
                description: success
-              payload: 
+              payload:
                 type: string
                 description: success message
         '500':
@@ -716,7 +696,7 @@ paths:
           description: failed
           schema:
             $ref: '#/definitions/Response404'
-            
+
   /abandonedCarts/sendAnalytics:
     get:
       description: Fetch all the analytics against a store
@@ -962,39 +942,6 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-  /broadcasts/all/:days:
-    get:
-      description: Gives the data of braodcasts of a particular user for the given number of past days. If days is 0, all broadcasts will return
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: object
-                properties:
-                  broadcasts:
-                    type: array
-                    items:
-                      type: object
-                      $ref: '#/definitions/Broadcast'
-                  broadcastpages:
-                    type: array
-                    items:
-                      type: object
-                      $ref: '#/definitions/Page_Broadcast'
-        '404':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response404'
   /broadcasts/allBroadcasts:
     post:
       description: Gives the data of all braodcasts of a particular user
@@ -1125,6 +1072,12 @@ paths:
                   id:
                     type: string
                     description: The path where the file is uploaded
+                  attachment_id:
+                    type: string
+                    description: The path where the file is uploaded
+                  name:
+                    type: string
+                    description: Name of the uploaded file
                   url:
                     type: string
                     description: The url of the file
@@ -1136,22 +1089,6 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-  /broadcasts/download:
-    get:
-      description: Gives the file, image ect attached by the user in broadcast
-      consumes:
-        - application/json
-      produces:
-        - application/*
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: file
-        '404':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response404'
   /broadcasts/delete/:id:
     delete:
       description: Delete the file that the user has attached with broadcast
@@ -1200,6 +1137,153 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response404'
+  /broadcasts/addButton:
+    post:
+      description: Adds a button to the message component
+      consumes:
+        - application/json
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: button
+          in: body
+          description: The button
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Button title
+              type:
+                type: string
+                description: Button type
+              url:
+                type: string
+                description: Redirection url for the type 'web_url'
+              sequenceId:
+                type: string
+                description: Id of the sequence for the type 'postback'
+              action:
+                type: string
+                description: Trigger action for particular sequence
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  type:
+                    type: string
+                  url:
+                    type: string
+                  newUrl:
+                    type: string
+                  sequenceId:
+                    type: string
+                  action:
+                    type: string
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /broadcasts/editButton:
+    post:
+      description: Edits the button of the message component
+      consumes:
+        - application/json
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: button
+          in: body
+          description: The button
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Button title
+              type:
+                type: string
+                description: Button type
+              newUrl:
+                type: string
+                description: Saved redirection url for the type 'web_url'
+              oldUrl:
+                type: string
+                description: Original redirection url for the type 'web_url'
+              id:
+                type: string
+                description: Button id
+              sequenceId:
+                type: string
+                description: Id of the sequence for the type 'postback'
+              action:
+                type: string
+                description: Trigger action for particular sequence
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  type:
+                    type: string
+                  url:
+                    type: string
+                  newUrl:
+                    type: string
+                  sequenceId:
+                    type: string
+                  action:
+                    type: string
+                  id:
+                    type: string
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /broadcasts/deleteButton/:id:
+    delete:
+      description: Delete the button of the message component
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: success
+              payload:
+                type: string
+                description: Url deleted successfully
+        '404':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response404'
   /dashboard/:id:
     get:
       description: Gives the total number of pages connected to KiboPush
@@ -1220,7 +1304,7 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-  /dashboard/sentVsSeen:
+  /dashboard/sentVsSeen/:pageId:
     get:
       description: Gives the sent, seen and responses count of all the surveys, poll and broadcasts of the logged in user
       consumes:
@@ -1359,6 +1443,9 @@ paths:
                   pages:
                     type: number
                     description: the number of connected pages of the user
+                  totalPages:
+                    type: number
+                    description: the number of pages of the user
                   subscribers:
                     type: number
                     description: the total number of subscribers of all the connected pages
@@ -1518,7 +1605,12 @@ paths:
           required: true
         - name: pageId
           in: formData
-          description: The id of the page
+          description: The object id of the page
+          type: string
+          required: true
+        - name: _id
+          in: formData
+          description: The string id of the page
           type: string
           required: true
         - name: nameColumn
@@ -1574,7 +1666,10 @@ paths:
                   type: string
               pageId:
                 type: string
-                description: id of the page
+                description: Object Id of the page
+              _id:
+                type: string
+                description: String Id of the page
               text:
                 type: string
                 description: text of the message
@@ -1598,37 +1693,6 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-
-  /growthtools/retrievePhoneNumbers/:
-    get:
-      description: Retrieves phone numbers of subscribers
-      consumes:
-          - application/json
-      produces:
-        - application/json
-      responses:
-        '201':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: array
-                items:
-                  type: string
-                description: array of phone numbers
-        '404':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response404'
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-
   /growthtools/pendingSubscription/:name/:
     get:
       description: Retrieves phone of a particular file that haven't subscribed yet
@@ -1648,8 +1712,7 @@ paths:
               payload:
                 type: array
                 items:
-                  type: string
-                description: array of phone numbers
+                  $ref: '#/definitions/PhoneNumbers'
         '404':
           description: failed
           schema:
@@ -1680,8 +1743,6 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
-
-
 
   /livechat/:session_id:
     get:
@@ -2952,49 +3013,6 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response404'
-  /surveys/all/:days:
-    get:
-      description: Gives the data of surveys, surveys sent and surveys responsed for the past days. If days is 0, all surveys data is returned.
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: object
-                properties:
-                  responsesCount:
-                    type: array
-                    items:
-                      type: object
-                      $ref: '#/definitions/Survey_Response'
-                  surveys:
-                    type: array
-                    items:
-                      type: object
-                      $ref: '#/definitions/Survey'
-                  surveypages:
-                    type: array
-                    items:
-                      type: object
-                      $ref: '#/definitions/Page_Survey'
-
-        '404':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response404'
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
   /surveys/allSurveys/:
     post:
       description: Gives the data of surveys, surveys sent and surveys responsed for the past days. If days is 0, all surveys data is returned.
@@ -3111,8 +3129,22 @@ paths:
                     type: array
                     items:
                       type: string
+                  segmentationTags:
+                    type: array
+                    items:
+                      type: string
+                  segmentationSurvey:
+                    type: array
+                    items:
+                      type: string
+                  segmentationList:
+                    type: array
+                    items:
+                      type: string
                   isSegmented:
                     type: boolean
+                  fbMessageTag:
+                    type: string
                   datetime:
                     type: string
         '500':
@@ -3162,10 +3194,18 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: _id
           in: formData
           description: The id of the survey to send
           required: true
+          type: string
+        - name: title
+          in: formData
+          description: The title for the survey
+          type: string
+        - name: userId
+          in: formData
+          description: The user Id for the survey
           type: string
         - name: isSegemented
           in: formData
@@ -3237,37 +3277,6 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response404'
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-  /surveys/submitresponse:
-    post:
-      description: creates a survey response
-      consumes:
-          - application/json
-          - application/x-www-form-urlencoded
-      produces:
-        - application/json
-      parameters:
-        - name: surveyResponse
-          in: body
-          required: true
-          description: Survey Response details
-          schema:
-            $ref: '#/definitions/Survey_Response'
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: string
-                description: Response submitted successfully
         '500':
           description: failed
           schema:
@@ -3499,183 +3508,6 @@ paths:
               payload:
                 type: string
                 description: the user's facebook id
-  /workflows/:
-    get:
-      description: Gives all the details of workflows created by a user
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: array
-                items:
-                  $ref: '#/definitions/Workflow'
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-
-  /workflows/create:
-    post:
-      description: creates a new workflow
-      consumes:
-          - application/json
-          - application/x-www-form-urlencoded
-      produces:
-        - application/json
-      parameters:
-        - name: workflow
-          in: body
-          description: The workflow details
-          required: true
-          schema:
-            $ref: '#/definitions/Workflow'
-      responses:
-        '201':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: object
-                $ref: '#/definitions/Workflow'
-                description: The newly created workflow
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-  /workflows/edit:
-    post:
-      description: Edit a workflow
-      consumes:
-          - application/json
-          - application/x-www-form-urlencoded
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          in: formData
-          description: The id of the workflow to edit
-          required: true
-          type: string
-        - name: condition
-          in: formData
-          description: The condition of the workflow
-          required: false
-          type: string
-        - name: keywords
-          in: formData
-          description: The keywords to specify a reply
-          required: false
-          type: array
-          items:
-            type: string
-        - name: reply
-          in: formData
-          description: The reply when any of the words from keywords is found
-          required: false
-          type: string
-        - name: isActive
-          in: formData
-          description: Whether the workflow is active of not
-          required: false
-          type: boolean
-          default: true
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: object
-                $ref: '#/definitions/Workflow'
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-  /workflows/enable:
-    post:
-      description: Enables a workflow
-      consumes:
-          - application/json
-          - application/x-www-form-urlencoded
-      produces:
-        - application/json
-      parameters:
-        - name: _id
-          in: formData
-          description: The id of the workflow whose status to enable
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                    description: The id of the workflow whose status is enabled
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
-
-  /workflows/disable:
-    post:
-      description: Disables a workflow
-      consumes:
-          - application/json
-          - application/x-www-form-urlencoded
-      produces:
-        - application/json
-      parameters:
-        - name: _id
-          in: formData
-          description: The id of the workflow whose status to disable
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              status:
-               type: string
-               description: success
-              payload:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                    description: The id of the workflow whose status is enabled
-        '500':
-          description: failed
-          schema:
-             $ref: '#/definitions/Response500'
   /menu:
     get:
       description: Gives all the menus created by a logged in user
@@ -3695,7 +3527,7 @@ paths:
               payload:
                 type: array
                 items:
-                  $ref: '#/definitions/Menu'
+                  $ref: '#/definitions/Menu1'
         '500':
           description: failed
           schema:
@@ -3725,8 +3557,7 @@ paths:
                type: string
                description: success
               payload:
-                type: object
-                $ref: '#/definitions/Menu'
+                $ref: '#/definitions/Menu1'
         '500':
           description: failed
           schema:
@@ -4058,9 +3889,7 @@ paths:
                 type: object
                 properties:
                   survey:
-                    type: array
-                    items:
-                      $ref: '#/definitions/SurveyTemplate'
+                    $ref: '#/definitions/SurveyTemplate'
                   questions:
                     type: array
                     items:
@@ -4404,7 +4233,7 @@ paths:
                description: success
               payload:
                 type: object
-                $ref: '#/definitions/ListEdit'
+                $ref: '#/definitions/List'
         '500':
           description: failed
           schema:
@@ -4698,14 +4527,14 @@ paths:
           type: array
           items:
             type: string
-        - name: teamPagesIds
+        - name: pageIds
           in: formData
           description: The ids of the pages of the team
           required: true
           type: array
           items:
             type: string
-        - name: teamAgents
+        - name: agentIds
           in: formData
           description: The ids of the agents of the team
           required: true
@@ -4752,7 +4581,7 @@ paths:
           description: The name of the team
           required: true
           type: string
-        - name: descriprion
+        - name: description
           in: formData
           description: The description of the team
           required: true
@@ -4887,7 +4716,7 @@ paths:
                description: success
               payload:
                 type: object
-                $ref: '#/definitions/TeamAgents'
+                $ref: '#/definitions/TeamPages'
         '500':
           description: failed
           schema:
@@ -5747,7 +5576,7 @@ paths:
               payload:
                 type: array
                 items:
-                  type: string
+                  type: object
               title:
                 type: string
       responses:
@@ -5791,7 +5620,7 @@ paths:
               payload:
                 type: array
                 items:
-                  type: string
+                  type: object
               title:
                 type: string
       responses:
@@ -5916,7 +5745,12 @@ paths:
                type: string
                description: success
               payload:
-                $ref: '#/definitions/Sequence'
+                type: object
+                properties:
+                  ok:
+                    type: number
+                  n:
+                    type: number
         '500':
           description: failed
           schema:
@@ -5943,7 +5777,12 @@ paths:
                type: string
                description: success
               payload:
-                $ref: '#/definitions/SequenceMessage'
+                type: object
+                properties:
+                  ok:
+                    type: number
+                  n:
+                    type: number
         '500':
           description: failed
           schema:
@@ -6688,13 +6527,10 @@ definitions:
       subscribeToMessengerTourSeen:
         type: boolean
         description: Whether the user has visited the subscribe to messenger page or not
-
   Broadcast:
     required:
       - payload
-      - type
       - title
-      - text
       - isSegmented
     type: object
     description: Broadcasts are the messages that we want to send to our facebook page audience. These can be platform specific. In v1, the platform value is 'facebook' only.
@@ -6712,21 +6548,9 @@ definitions:
         items:
           type: object
           description: The payload array would have different types of objects with different json structure. So, for now, we will provide a link that will tell the json structure
-      type:
-        type: string
-        description: This can be either text or attachment.
       title:
         type: string
         description: Title of the broadcast
-      text:
-        type: string
-        description: The value of text.
-      fileurl:
-        type: string
-        description: The url of the file to send
-      attachmentType:
-        type: string
-        description: Type of attachement like file, image etc
       isSegmented:
         type: boolean
         description: Whether this broadcast is segmented or not
@@ -6873,9 +6697,9 @@ definitions:
       pageUserName:
         type: string
         description: The username of the page
-      adminSubscriberId:
+      subscribers:
         type: string
-        description: The subscriber id of the admin of the page
+        description: Subscribers of the page
 
   Poll:
     type: object
@@ -6949,7 +6773,9 @@ definitions:
         type: boolean
         description: Whether to send this poll to a list or not
         default: false
-
+      fbMessageTag:
+        description: The message tag for the survey
+        type: string
   Poll_Response:
     type: object
     description: Responses to the poll given by facebook page audience is stored here.
@@ -7051,6 +6877,10 @@ definitions:
         type: string
         description: User Id of the admin of that page.
         readOnly: true
+      companyId:
+        type: string
+        description: Company Id of the admin of that page.
+        readOnly: true
       datetime:
         type: string
         description: Date of creation
@@ -7091,7 +6921,7 @@ definitions:
         items:
           type: string
           description: The list of the subscribers to send survey to
-      segmentationPoll:
+      segmentationSurvey:
         type: array
         items:
           type: string
@@ -7100,6 +6930,9 @@ definitions:
         type: boolean
         description: Whether to send this survey to a list or not
         default: false
+      fbMessageTag:
+        type: string
+        description: Facebook Message tag of the survey
   EditSurvey:
     type: object
     description: The table contains information for editing a survey
@@ -7201,6 +7034,9 @@ definitions:
         type: boolean
         description: Whether this survey is segmented or not
         default: false
+      fbMessageTag:
+        type: string
+        description: Facebook message tag of the survey
       segmentationPageIds:
         type: array
         items:
@@ -7216,6 +7052,21 @@ definitions:
         items:
           type: string
           description: The genders of the subscribers to send survey to
+      segmentationTags:
+        type: array
+        items:
+          type: string
+          description: The Tags of the subscribers to send survey to
+      segmentationList:
+        type: array
+        items:
+          type: string
+          description: The List of the subscribers to send survey to
+      segmentationSurvey:
+        type: array
+        items:
+          type: string
+          description: Survey will be sent to the subscribers who have earlier responded to a particular survey
   Create_Survey_Question:
     type: object
     description: Here we store the questions which belong to a survey. This table is associated with Survey table.
@@ -7345,6 +7196,11 @@ definitions:
         items:
           type: string
           description: The genders of the subscribers to send autoposting to
+      segmentationTags:
+        type: array
+        items:
+          type: string
+          description: The tags of the subscribers to send autoposting to
       segmentationTimeZone:
         type: string
         description: The timezone of the subscriber to send autoposting to
@@ -7430,6 +7286,9 @@ definitions:
       userId:
         type: string
         description: The unique id of the the user
+      companyId:
+        type: string
+        description: The company id of the the user
       payload:
         type: object
         description: The menu items in the format of the persistent api
@@ -7450,8 +7309,9 @@ definitions:
         type: string
         description: The statement of the poll
       category:
-        type: string
-        description: The ctategory of the poll
+        type: array
+        items:
+          type: string
       datetime:
         type: object
         description: The date and time at which the poll is created
@@ -7474,8 +7334,9 @@ definitions:
         type: string
         description: The description of the survey
       category:
-        type: string
-        description: The ctategory of the survey
+        type: array
+        items:
+          type: string
       datetime:
         type: object
         description: The date and time at which the survey is created
@@ -7514,8 +7375,9 @@ definitions:
         type: string
         description: The title of the broadcast
       category:
-        type: string
-        description: The ctategory of the broadcast
+        type: array
+        items:
+          type: string
       payload:
         type: array
         items:
@@ -7527,6 +7389,8 @@ definitions:
       userId:
         type: string
         readOnly: true
+      createdBySuperUser:
+        type: boolean
       companyId:
         type: string
         readOnly: true
@@ -7542,8 +7406,9 @@ definitions:
         type: string
         description: The title of the broadcast
       category:
-        type: string
-        description: The ctategory of the broadcast
+        type: array
+        items:
+          type: string
       payload:
         type: array
         items:
@@ -7558,6 +7423,8 @@ definitions:
       companyId:
         type: string
         readOnly: true
+      createdBySuperUser:
+        type: boolean
   Graph:
     type: object
     description: gives the number of broadcasts, surveys or polls made along with the date
@@ -7728,15 +7595,6 @@ definitions:
       listName:
         type: string
         description: Name of the list
-      userId:
-        type: string
-        description: Id of the user
-      companyId:
-        type: string
-        description: CompanyId of the user
-      datetime:
-        type: object
-        description: Date and time at which the list is created
       content:
         type: array
         items:
@@ -7745,17 +7603,6 @@ definitions:
       conditions:
         type: object
         description: the conditions to create a list
-      initialList:
-        type: boolean
-        description: If it is a global list or not
-        readOnly: true
-      parentList:
-        type: string
-        description: Id of the parent list
-      parentListName:
-        type: string
-        description: Name of the parent list
-
   TeamAgents:
     type: object
     description: This table is used to store team agents information
@@ -7928,7 +7775,7 @@ definitions:
         autoposting_type:
           type: string
           description: facebook or twitter
-        autoposting_id:
+        autopostingId:
           type: string
           description: unique id of autoposting channel
         sent:
@@ -8026,7 +7873,7 @@ definitions:
       datetime:
         type: string
         description: date and time of creation of the sequence
-        
+
   AbandonedStore:
     type: object
     description: This table is used to store the abandoned store information
@@ -8046,13 +7893,13 @@ definitions:
       shopUrl:
         type: string
         description: URL of the store object linked
-      shopToken: 
+      shopToken:
         type: string
         description: Unique token of the shop provided by shopify
       isActive:
         type: boolean
         description: Either the store is in active state or non active state
-        
+
   AbandonedAnalytics:
     type: object
     description: This table stores analytics against a store
@@ -8060,10 +7907,10 @@ definitions:
       _id:
         type: string
         description: unique id of the record
-      storeId: 
+      storeId:
         type: string
         description: unique id of the store the analytics belong to
-      totalExtraSales: 
+      totalExtraSales:
         type: number
         description: total amount generated by purchases of customers after using kibopush
       totalAbandonedCarts:
@@ -8078,12 +7925,12 @@ definitions:
       totalPushSent:
         type: number
         description: total number of push messages sent to subscriber
-        
+
   AbandonedCheckout:
     type: object
     description: This table stores the abandoned checkouts
     properties:
-      _id: 
+      _id:
         type: string
         description: unique id of the record
       shopifyCheckoutId:
@@ -8095,7 +7942,7 @@ definitions:
       cartToken:
         type: string
         description: unique token of the cart belong to the checkout
-      storeId: 
+      storeId:
         type: string
         description: unique id of the store the analytics belong to
       userId:
@@ -8104,7 +7951,7 @@ definitions:
       companyId:
         type: string
         description: company id of the company that the user belongs to
-      totalPrice: 
+      totalPrice:
         type: number
         description: total amount of value added to cart
       abandonedCheckoutUrl:
@@ -8113,7 +7960,7 @@ definitions:
       status:
         type: string
         description: Either the cart is pending, sent or seen
-      userRef: 
+      userRef:
         type: string
         description: unique id from which Facebook recognizes the subscriber
       productIds:
@@ -8126,13 +7973,13 @@ definitions:
       scheduled_at:
         type: object
         description: the date object at which the checkout was created
-      isPurchased: 
+      isPurchased:
         type: boolean
         description: Either the cart is purchased or not
       isExtraSales:
         type: boolean
         description: Either the purchase was made after sending push or not
-        
+
   SequenceMessage:
     type: object
     description: This table is used to store sequence message information
@@ -8165,6 +8012,8 @@ definitions:
         type: number
       isActive:
         type: boolean
+      fbMessageTag:
+        type: string
 
   SequenceSubscriber:
     type: object
@@ -8252,6 +8101,39 @@ definitions:
         type: number
         description: the number of comments on the post
         readOnly: true
+  PhoneNumbers:
+    type: object
+    description: The table stores the phone numbers of the customers
+    properties:
+      _id:
+        type: string
+        description: unique id of the record
+        readOnly: true
+      pageId:
+        type: string
+        description: the id of the page to set webhook for
+      companyId:
+        type: string
+        description: company id of the company that the user belongs to
+        readOnly: true
+      userId:
+        type: string
+        description: user id of the user
+        readOnly: true
+      name:
+          type: string
+          description: Name of the customer
+      number:
+        type: string
+        description:  Number of the customer
+      hasSubscribed:
+        type: boolean
+        default: false
+        description: If the user has subscribed to the page or not
+      fileName:
+        type: array
+        items:
+          type: string
   Webhook:
     type: object
     description: This table is used to store facebook webhooks information
@@ -8303,8 +8185,6 @@ definitions:
         description: company id of the company that the user belongs to
         readOnly: true
       userId:
-        type: string
-        description: payload for the user object
         $ref: '#/definitions/User'
       apiPermission:
         type: boolean
