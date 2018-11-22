@@ -1,6 +1,39 @@
+
 doctype html
-html(lang="en")
-  include ../partials/header.pug
-    block content
-      h1 Enable Product Access
-      p Enable Product Access
+html(lang='en')
+  include ../partials/head.pug
+    div(class='m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body')
+      div(class='m-grid__item m-grid__item--fluid m-wrapper')
+        div(class='m-content')
+          div(class='row')
+            div(class='col-md-2')
+            div(class='col-md-4')
+                div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
+                  div(class='m-portlet__body')
+                    div(class='row')
+                      div(class='col-md-4')
+                        center
+                          div(style='border: 1px solid rgb(204, 204, 204)')
+                            h1(style='font-size:5rem') KE
+                      div(class='col-md-8')
+                        h3 KiboEngage
+                        br
+                        span(class='m-switch m-switch--icon m-switch--success')
+                          label
+                            input(type='checkbox' name='' checked='checked')
+                            span
+            div(class='col-md-4')
+                div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
+                  div(class='m-portlet__body')
+                    div(class='row')
+                      div(class='col-md-4')
+                        center
+                          div(style='border: 1px solid rgb(204, 204, 204)')
+                            h1(style='font-size:5rem') KC
+                      div(class='col-md-8')
+                        h3 KiboChat
+                        br
+                        span(class='m-switch m-switch--icon m-switch--success')
+                          label
+                            input(type='checkbox' name='' checked='checked')
+                            span
