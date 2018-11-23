@@ -1,0 +1,38 @@
+
+script.
+  $(document).ready(function() {
+    console.log('inside')
+    $(".switch-btn").change(function (e) {
+      console.log('hello', e.target.checked)
+        let payload = {
+          userId: 'sad',
+          companyId: 'da',
+          scope: {}
+        }   
+        if (e.target.id === 'KC') {
+            payload.scope.key = 'kiboChat'
+            payload.scope.value = e.target.checked
+        } else if (e.target.id === 'KE') {
+            payload.scope.key = 'kiboEngage'
+            payload.scope.value = e.target.checked
+          }
+        console.log('payload', payload)
+    $.ajax({
+      url : '/api/consumers/updateProductStatus',
+      type : 'POST',
+      data : payload,
+      dataType:'json',
+      success : function(data) {
+        console.log('Data: '+JSON.stringify(data));
+      },
+      error : function(request,error)
+      {
+        console.log(request)
+        console.log(error)
+        console.log("Request: " + JSON.stringify(request));
+        return document.getElementById(
+            "alertMsg").innerHTML = request.responseJSON.payload
+      }
+    })
+  })
+  })

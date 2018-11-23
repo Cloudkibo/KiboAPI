@@ -4,6 +4,7 @@ module.exports = function (app) {
   const env = app.get('env')
   // API middlewares go here
   app.use('/api/v1/test', require('./api/v1/test'))
+  app.use('/api/consumers', require('./api/v1/consumers'))
   app.use('/api/livechat', require('./api/v1/kibochat/liveChat'))
   app.use('/api/sessions', require('./api/v1/kibochat/sessions'))
   app.use('/api/bots', require('./api/v1/kibochat/smartReplies'))
