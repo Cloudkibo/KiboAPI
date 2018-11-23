@@ -13,7 +13,15 @@ module.exports = function (app) {
   app.use('/api/autoposting_messages', require('./api/v1/kiboengage/autopostingMessages'))
   app.use('/api/broadcasts', require('./api/v1/kiboengage/broadcasts'))
   app.use('/api/post', require('./api/v1/kiboengage/commentCapture'))
-
+  app.use('/api/lists', require('./api/v1/kiboengage/lists'))
+  app.use('/api/menu', require('./api/v1/kiboengage/menu'))
+  app.use('/api/adminsubscriptions', require('./api/v1/kiboengage/pageadminsubscriptions'))
+  app.use('/api/growthtools', require('./api/v1/kiboengage/phoneNumber'))
+  app.use('/api/polls', require('./api/v1/kiboengage/polls'))
+  app.use('/api/sequenceMessaging', require('./api/v1/kiboengage/sequenceMessaging'))
+  app.use('/api/surveys', require('./api/v1/kiboengage/surveys'))
+  app.use('/api/templates', require('./api/v1/kiboengage/templates'))
+  app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
   // index page
   // app.get('/', function (req, res) {
   //   res.render('layouts/index')
