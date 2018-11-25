@@ -4,6 +4,7 @@ module.exports = function (app) {
   const env = app.get('env')
   // API middlewares go here
   app.use('/api/v1/test', require('./api/v1/test'))
+  app.use('/api/consumers', require('./api/v1/consumers'))
   app.use('/api/livechat', require('./api/v1/kibochat/liveChat'))
   app.use('/api/sessions', require('./api/v1/kibochat/sessions'))
   app.use('/api/bots', require('./api/v1/kibochat/smartReplies'))
@@ -12,7 +13,15 @@ module.exports = function (app) {
   app.use('/api/autoposting_messages', require('./api/v1/kiboengage/autopostingMessages'))
   app.use('/api/broadcasts', require('./api/v1/kiboengage/broadcasts'))
   app.use('/api/post', require('./api/v1/kiboengage/commentCapture'))
-
+  app.use('/api/lists', require('./api/v1/kiboengage/lists'))
+  app.use('/api/menu', require('./api/v1/kiboengage/menu'))
+  app.use('/api/adminsubscriptions', require('./api/v1/kiboengage/pageadminsubscriptions'))
+  app.use('/api/growthtools', require('./api/v1/kiboengage/phoneNumber'))
+  app.use('/api/polls', require('./api/v1/kiboengage/polls'))
+  app.use('/api/sequenceMessaging', require('./api/v1/kiboengage/sequenceMessaging'))
+  app.use('/api/surveys', require('./api/v1/kiboengage/surveys'))
+  app.use('/api/templates', require('./api/v1/kiboengage/templates'))
+  app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
   // index page
   // app.get('/', function (req, res) {
   //   res.render('layouts/index')

@@ -8,32 +8,58 @@ html(lang='en')
           div(class='row')
             div(class='col-md-2')
             div(class='col-md-4')
-                div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
-                  div(class='m-portlet__body')
-                    div(class='row')
-                      div(class='col-md-4')
-                        center
-                          div(style='border: 1px solid rgb(204, 204, 204)')
-                            h1(style='font-size:5rem') KE
-                      div(class='col-md-8')
-                        h3 KiboEngage
-                        br
-                        span(class='m-switch m-switch--icon m-switch--success')
-                          label
-                            input(type='checkbox' name='' checked='checked')
-                            span
+              div(style='display:flex')
+                span(class="col-form-label" style='font-weight: 500;font-size: larger;width: 120px') API Key:
+                input(class="form-control")   
             div(class='col-md-4')
-                div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
-                  div(class='m-portlet__body')
-                    div(class='row')
-                      div(class='col-md-4')
-                        center
-                          div(style='border: 1px solid rgb(204, 204, 204)')
-                            h1(style='font-size:5rem') KC
-                      div(class='col-md-8')
-                        h3 KiboChat
-                        br
-                        span(class='m-switch m-switch--icon m-switch--success')
-                          label
-                            input(type='checkbox' name='' checked='checked')
-                            span
+              div(style='display:flex')
+                span(class="col-form-label" style='font-weight: 500;font-size: larger;width:120px') API Secret:
+                input(class="form-control" type='password')
+            div(class='col-md-2')
+          br
+          br
+          div(class='row')
+            div(class='col-md-2')
+            div(class='col-md-4')
+              div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
+                div(class='m-portlet__body')
+                  div(class='row')
+                    div(class='col-md-4')
+                      center
+                        div(style='border: 1px solid rgb(204, 204, 204)')
+                          h1(style='font-size:5rem') KE
+                    div(class='col-md-8')
+                      h3 KiboEngage
+                      br
+                      span(class='m-switch m-switch--icon m-switch--success')
+                        label
+                          input(type='checkbox' name='' checked='checked' class='switch-btn' id='KE')
+                          span
+            div(class='col-md-4')  
+              div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
+                div(class='m-portlet__body')
+                  div(class='row')
+                    div(class='col-md-4')
+                      center
+                        div(style='border: 1px solid rgb(204, 204, 204)')
+                          h1(style='font-size:5rem') KC
+                    div(class='col-md-8')
+                      h3 KiboChat
+                      br
+                      span(class='m-switch m-switch--icon m-switch--success')
+                        label
+                          input(type='checkbox' name='' checked='checked' class='switch-btn' id='KC')
+                          span
+          br
+          br
+          div(class='row')
+            div(class='col-md-2')
+            div(class='col-md-8')      
+              div(class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-dismissible m--margin-bottom-30" role="alert")
+                div(class="m-alert__icon")
+                  i(class="flaticon-exclamation m--font-brand")
+                div(class="m-alert__text" style='font-size: initial') To view our API documentation, please click  
+                  a(href='#')     here
+            div(class='col-md-2')
+  include ../partials/handlerScripts.pug    
+      

@@ -1022,8 +1022,10 @@
                   "description": "success"
                 },
                 "payload": {
-                  "type": "object",
-                  "$ref": "#/definitions/Bot",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Bot"
+                  },
                   "description": "Bot data"
                 }
               }
@@ -1307,6 +1309,200 @@
                 "status": {
                   "type": "string",
                   "description": "success"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/bots/waitingReply": {
+      "get": {
+        "description": "Gets all the users that are waiting reply from bot",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Subscriber"
+                  },
+                  "description": "Subscriber data"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/bots/fetchUnansweredQueries": {
+      "post": {
+        "description": "Retrieves the unanswered question",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "body",
+            "required": true,
+            "description": "Bot details",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "botId": {
+                  "type": "string",
+                  "description": "id of the bot"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "$ref": "#/definitions/UnansweredQuestion"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/bots/fetchWaitingSubscribers": {
+      "post": {
+        "description": "Retrieves details of subscribers that are waiting reply from bot",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "body",
+            "required": true,
+            "description": "Bot details",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "botId": {
+                  "type": "string",
+                  "description": "id of the bot"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "$ref": "#/definitions/WaitingSubscriber"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/bots/removeWaitingSubscribers": {
+      "post": {
+        "description": "remove waiting subscribers",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "body",
+            "required": true,
+            "description": "Bot details",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "id of the bot"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object"
                 }
               }
             }
@@ -2214,7 +2410,17 @@
                 },
                 "payload": {
                   "type": "object",
-                  "description": "url message"
+                  "properties": {
+                    "ok": {
+                      "type": "number"
+                    },
+                    "nModified": {
+                      "type": "number"
+                    },
+                    "n": {
+                      "type": "number"
+                    }
+                  }
                 }
               }
             }
@@ -2268,6 +2474,114 @@
                 "payload": {
                   "type": "object",
                   "description": "url meta data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response404"
+            }
+          }
+        }
+      }
+    },
+    "/livechat/search": {
+      "post": {
+        "description": "search chat messages",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "livechat",
+            "in": "body",
+            "description": "The live chat details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_id": {
+                  "type": "string",
+                  "description": "the id of the session in which to search the message"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "the text to search"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/LiveChat"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response404"
+            }
+          }
+        }
+      }
+    },
+    "/livechat/:session_id": {
+      "post": {
+        "description": "find chat messages on the basis of session id",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "livechat",
+            "in": "body",
+            "description": "The live chat details",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/LiveChat"
+                  }
                 }
               }
             }
@@ -2502,43 +2816,6 @@
                 },
                 "payload": {
                   "$ref": "#/definitions/Invitation"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "failed",
-            "schema": {
-              "$ref": "#/definitions/Response500"
-            }
-          }
-        }
-      }
-    },
-    "/livechat/:session_id": {
-      "get": {
-        "description": "Gives the chats of a particular session",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "description": "success"
-                },
-                "payload": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/LiveChat"
-                  }
                 }
               }
             }
@@ -3633,8 +3910,11 @@
                   "description": "success"
                 },
                 "payload": {
-                  "type": "object",
-                  "$ref": "#/definitions/Session"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/Session"
+                  }
                 }
               }
             }
@@ -3662,35 +3942,41 @@
           {
             "name": "session",
             "in": "body",
-            "description": "session information",
             "required": true,
+            "description": "session details",
             "schema": {
               "type": "object",
               "properties": {
-                "filter": {
-                  "type": "boolean",
-                  "description": "whether a filter has been applied"
+                "last_id": {
+                  "type": "string",
+                  "description": "Id of the last record on the page. None if first page"
                 },
                 "first_page": {
                   "type": "boolean",
-                  "description": "whether it is the first page"
+                  "description": "whether it is first page or not"
                 },
                 "number_of_records": {
                   "type": "number",
-                  "description": "number of sessions to retrieve"
+                  "description": "Number of records on each page"
                 },
-                "page_value": {
-                  "type": "string",
-                  "description": "page id"
+                "filter": {
+                  "type": "boolean",
+                  "description": "Whether to fetch filtered records or not"
                 },
                 "filter_criteria": {
                   "type": "object",
                   "properties": {
-                    "search_value": {
-                      "type": "string"
-                    },
                     "sort_value": {
-                      "type": "string"
+                      "type": "number",
+                      "description": "Sort the sessions"
+                    },
+                    "page_value": {
+                      "type": "string",
+                      "description": "Search the sessions on the basis of page value"
+                    },
+                    "search_value": {
+                      "type": "string",
+                      "description": "Search the sessions on the basis of name of subscriber"
                     }
                   }
                 }
@@ -3704,15 +3990,15 @@
             "schema": {
               "type": "object",
               "properties": {
-                "open_sessions": {
+                "status": {
+                  "type": "string"
+                },
+                "payload": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/Session"
                   }
-                },
-                "count": {
-                  "type": "number",
-                  "description": "number of sessions retrieved"
                 }
               }
             }
@@ -3740,35 +4026,41 @@
           {
             "name": "session",
             "in": "body",
-            "description": "session information",
             "required": true,
+            "description": "session details",
             "schema": {
               "type": "object",
               "properties": {
-                "filter": {
-                  "type": "boolean",
-                  "description": "whether a filter has been applied"
+                "last_id": {
+                  "type": "string",
+                  "description": "Id of the last record on the page. None if first page"
                 },
                 "first_page": {
                   "type": "boolean",
-                  "description": "whether it is the first page"
+                  "description": "whether it is first page or not"
                 },
                 "number_of_records": {
                   "type": "number",
-                  "description": "number of sessions to retrieve"
+                  "description": "Number of records on each page"
                 },
-                "page_value": {
-                  "type": "string",
-                  "description": "page id"
+                "filter": {
+                  "type": "boolean",
+                  "description": "Whether to fetch filtered records or not"
                 },
                 "filter_criteria": {
                   "type": "object",
                   "properties": {
-                    "search_value": {
-                      "type": "string"
-                    },
                     "sort_value": {
-                      "type": "string"
+                      "type": "number",
+                      "description": "Sort the sessions"
+                    },
+                    "page_value": {
+                      "type": "string",
+                      "description": "Search the sessions on the basis of page value"
+                    },
+                    "search_value": {
+                      "type": "string",
+                      "description": "Search the sessions on the basis of name of subscriber"
                     }
                   }
                 }
@@ -3782,15 +4074,15 @@
             "schema": {
               "type": "object",
               "properties": {
-                "closed_sessions": {
+                "status": {
+                  "type": "string"
+                },
+                "payload": {
                   "type": "array",
                   "items": {
+                    "type": "object",
                     "$ref": "#/definitions/Session"
                   }
-                },
-                "count": {
-                  "type": "number",
-                  "description": "number of sessions retrieved"
                 }
               }
             }
@@ -3865,31 +4157,17 @@
                 "payload": {
                   "type": "object",
                   "properties": {
-                    "chats": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/definitions/LiveChat"
-                      }
+                    "lastPayload": {
+                      "type": "object"
                     },
-                    "_id": {
+                    "lastRepliedBy": {
+                      "type": "object"
+                    },
+                    "lastDateTime": {
                       "type": "string"
                     },
-                    "subscriber_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Subscriber"
-                    },
-                    "page_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Page"
-                    },
-                    "company_id": {
-                      "type": "string"
-                    },
-                    "request_time": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
+                    "session": {
+                      "$ref": "#/definitions/Session"
                     }
                   }
                 }
@@ -3954,31 +4232,14 @@
                 "payload": {
                   "type": "object",
                   "properties": {
-                    "chats": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/definitions/LiveChat"
-                      }
+                    "ok": {
+                      "type": "number"
                     },
-                    "_id": {
-                      "type": "string"
+                    "nModified": {
+                      "type": "number"
                     },
-                    "subscriber_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Subscriber"
-                    },
-                    "page_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Page"
-                    },
-                    "company_id": {
-                      "type": "string"
-                    },
-                    "request_time": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
+                    "n": {
+                      "type": "number"
                     }
                   }
                 }
@@ -4029,6 +4290,10 @@
                 "agentName": {
                   "type": "string",
                   "description": "Name of the agent"
+                },
+                "isAssigned": {
+                  "type": "boolean",
+                  "description": "Whether the agent is assigned a session or not"
                 }
               }
             }
@@ -4047,31 +4312,14 @@
                 "payload": {
                   "type": "object",
                   "properties": {
-                    "chats": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/definitions/LiveChat"
-                      }
+                    "ok": {
+                      "type": "number"
                     },
-                    "_id": {
-                      "type": "string"
+                    "nModified": {
+                      "type": "number"
                     },
-                    "subscriber_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Subscriber"
-                    },
-                    "page_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Page"
-                    },
-                    "company_id": {
-                      "type": "string"
-                    },
-                    "request_time": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
+                    "n": {
+                      "type": "number"
                     }
                   }
                 }
@@ -4122,6 +4370,10 @@
                 "teamName": {
                   "type": "string",
                   "description": "Name of the team"
+                },
+                "isAssigned": {
+                  "type": "boolean",
+                  "description": "Whether the agent is assigned a session or not"
                 }
               }
             }
@@ -4140,31 +4392,14 @@
                 "payload": {
                   "type": "object",
                   "properties": {
-                    "chats": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/definitions/LiveChat"
-                      }
+                    "ok": {
+                      "type": "number"
                     },
-                    "_id": {
-                      "type": "string"
+                    "nModified": {
+                      "type": "number"
                     },
-                    "subscriber_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Subscriber"
-                    },
-                    "page_id": {
-                      "type": "object",
-                      "$ref": "#/definitions/Page"
-                    },
-                    "company_id": {
-                      "type": "string"
-                    },
-                    "request_time": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "string"
+                    "n": {
+                      "type": "number"
                     }
                   }
                 }
@@ -4227,7 +4462,18 @@
                   "description": "success"
                 },
                 "payload": {
-                  "$ref": "#/definitions/Subscriber"
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "number"
+                    },
+                    "nModified": {
+                      "type": "number"
+                    },
+                    "n": {
+                      "type": "number"
+                    }
+                  }
                 }
               }
             }
@@ -10569,6 +10815,16 @@
         },
         "replied_by": {
           "type": "string"
+        },
+        "seenDateTime": {
+          "type": "string",
+          "description": "The date and time at which this mesage was seen",
+          "readOnly": true
+        },
+        "seen": {
+          "type": "boolean",
+          "description": "whether this message is seen or not",
+          "readOnly": true
         }
       }
     },
@@ -10886,13 +11142,25 @@
           "description": "The status of the session",
           "default": "new"
         },
+        "is_assigned": {
+          "type": "boolean",
+          "default": false
+        },
+        "assigned_to": {
+          "type": "object"
+        },
         "request_time": {
           "type": "string",
           "description": "The date and time at which the session is created",
           "readOnly": true
         },
-        "replied_by": {
-          "type": "object"
+        "last_activity_time": {
+          "type": "string",
+          "readOnly": true
+        },
+        "agent_activity_time": {
+          "type": "string",
+          "readOnly": true
         }
       }
     },
@@ -11333,6 +11601,10 @@
           "type": "string",
           "description": "unique id of page"
         },
+        "companyId": {
+          "type": "string",
+          "description": "unique id of company"
+        },
         "userId": {
           "type": "string",
           "description": "unique id of user"
@@ -11380,7 +11652,7 @@
                   "type": "string"
                 }
               },
-              "_id": {
+              "intent_name": {
                 "type": "string",
                 "description": "unique id of particular question/answer combo"
               },
@@ -11390,6 +11662,110 @@
               }
             }
           }
+        },
+        "blockedSubscribers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Answer": {
+      "type": "object",
+      "description": "This table is used to store answers of the bot",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The unique id of the record",
+          "readOnly": true
+        },
+        "botId": {
+          "type": "string",
+          "description": "unique id of bot"
+        },
+        "intentId": {
+          "type": "string",
+          "description": "unique id of intent"
+        },
+        "questions": {
+          "type": "array",
+          "description": "array of questions",
+          "items": {
+            "type": "string"
+          }
+        },
+        "answer": {
+          "type": "string",
+          "description": "answer of questions"
+        },
+        "datetime": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "UnansweredQuestion": {
+      "type": "object",
+      "description": "This table is used to store unanswered questions of the bot",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The unique id of the record",
+          "readOnly": true
+        },
+        "botId": {
+          "type": "string",
+          "description": "unique id of bot"
+        },
+        "intentId": {
+          "type": "string",
+          "description": "unique id of intent"
+        },
+        "Question": {
+          "type": "string"
+        },
+        "Confidence": {
+          "type": "number",
+          "description": "answer of questions"
+        },
+        "datetime": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "WaitingSubscriber": {
+      "type": "object",
+      "description": "This table is used to store bot information",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The unique id of the record",
+          "readOnly": true
+        },
+        "botId": {
+          "type": "string",
+          "description": "unique id of bot"
+        },
+        "subscriberId": {
+          "type": "string",
+          "description": "unique id of subscriber"
+        },
+        "pageId": {
+          "type": "string",
+          "description": "unique id of page"
+        },
+        "intentId": {
+          "type": "string",
+          "description": "unique id of intent"
+        },
+        "Question": {
+          "type": "string"
+        },
+        "datetime": {
+          "type": "string",
+          "readOnly": true
         }
       }
     },

@@ -1,8 +1,16 @@
-const callApi = require('../../utility')
+const utility = require('../../utility')
 
-// Get list of menu items
-exports.index = function (req, res) {
-  callApi.callApi(`menu`, 'get', {}, req.headers.authorization, 'kiboengage')
+exports.upload = function (req, res) {
+  utility.callApi(`growthtools/upload`, 'post', req.body, req.headers.authorization, 'kiboengage')
+    .then(response => {
+      return res.status(500).json({ status: 'success', payload: response })
+    })
+    .catch(err => {
+      return res.status(500).json({status: 'failed', payload: err})
+    })
+}
+exports.sendNumbers = function (req, res) {
+  utility.callApi(`growthtools/sendNumbers`, 'post', req.body, req.headers.authorization, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -11,18 +19,8 @@ exports.index = function (req, res) {
     })
 }
 
-exports.indexByPage = function (req, res) {
-  callApi.callApi(`menu/indexByPage`, 'post', req.body, req.headers.authorization, 'kiboengage')
-    .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
-    })
-    .catch(err => {
-      return res.status(500).json({status: 'failed', payload: err})
-    })
-}
-
-exports.create = function (req, res) {
-  callApi.callApi(`menu/create`, 'post', req.body, req.headers.authorization, 'kiboengage')
+exports.pendingSubscription = function (req, res) {
+  utility.callApi(`growthtools/pendingSubscription/${req.params.name}`, 'get', {}, req.headers.authorization, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
