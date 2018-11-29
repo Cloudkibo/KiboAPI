@@ -28,6 +28,7 @@ module.exports = function (app) {
   // })
 
   app.get('/', (req, res) => {
+    console.log('req.user', req)
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
     // res.sendFile(path.join(config.root, 'client/index.html'))
