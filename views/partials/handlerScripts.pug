@@ -1,22 +1,32 @@
 
 script.
+  
   $(document).ready(function() {
-    console.log('inside')
-    $(".switch-btn").change(function (e) {
-      console.log('hello', e.target.checked)
-        let payload = {
-          userId: 'sad',
-          companyId: 'da',
-          scope: {}
-        }   
-        if (e.target.id === 'KC') {
-            payload.scope.key = 'kiboChat'
-            payload.scope.value = e.target.checked
-        } else if (e.target.id === 'KE') {
-            payload.scope.key = 'kiboEngage'
-            payload.scope.value = e.target.checked
-          }
-        console.log('payload', payload)
+    $("#showButton").click(function (e) {
+      if (document.getElementById('showButton').innerHTML === 'Show') {
+        document.getElementById('secret').type = 'text'
+        document.getElementById('showButton').innerHTML = 'Hide'
+        //- $('#SearchFieldText').get(0).setAttribute('type', 'text');
+      } else {
+        document.getElementById('secret').type = 'password'
+        document.getElementById('showButton').innerHTML = 'Show'
+      }
+    })
+  })
+  
+  function changeProductStatus(consumer) {
+    let payload = {
+      _id: consumer._id,
+      scope: {}
+    }   
+    if (event.target.id === 'KC') {
+      payload.scope.key = 'kiboChat'
+      payload.scope.value = event.target.checked
+    } else if (event.target.id === 'KE') {
+      payload.scope.key = 'kiboEngage'
+      payload.scope.value = event.target.checked
+    }
+    console.log('payload', payload)
     $.ajax({
       url : '/api/consumers/updateProductStatus',
       type : 'POST',
@@ -34,5 +44,4 @@ script.
             "alertMsg").innerHTML = request.responseJSON.payload
       }
     })
-  })
-  })
+  } 

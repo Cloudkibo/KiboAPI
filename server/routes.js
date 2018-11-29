@@ -1,5 +1,6 @@
 const config = require('./config/environment/index')
-
+const auth = require('./auth/auth.service')
+const dataLayer = require('./api/v1/consumers/consumers.datalayer')
 module.exports = function (app) {
   const env = app.get('env')
   // Exposed API middlewares go here
@@ -25,20 +26,30 @@ module.exports = function (app) {
   app.use('/api/consumers', require('./api/v1/consumers'))
 
   // first page
-  app.get('/', (req, res) => {
-    console.log('req.user', req)
+  app.get('/', auth.isAuthenticated(), (req, res) => {
+    console.log('req.user', req.user)
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
     // res.sendFile(path.join(config.root, 'client/index.html'))
-    res.render('pages/index', { environment: env })
+    res.render('pages/index', { environment: env, user: req.user })
   })
 
   // second page
-  app.get('/product', (req, res) => {
+  app.get('/product', auth.isAuthenticated(), (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
+    dataLayer.findOne({companyId: req.user.companyId, userId: req.user._id})
+    // dataLayer.findOne({'consumerId.companyId': 'da', 'consumerId.userId': 'sad'})
+      .then(consumer => {
+        res.render('pages/productAccess', {consumer: consumer, user: req.user})
+      })
+      .catch(error => {
+        return res.status(500).json({
+          status: 'failed',
+          payload: `Failed to find consumer ${JSON.stringify(error)}`
+        })
+      })
     // res.sendFile(path.join(config.root, 'client/index.html'))
-    res.render('pages/productAccess')
   })
 
   app.route('/:url(api|auth)/*').get((req, res) => {

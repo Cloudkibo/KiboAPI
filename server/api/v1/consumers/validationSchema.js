@@ -1,11 +1,7 @@
 exports.updateProductStatusPayload = {
   type: 'object',
   properties: {
-    userId: {
-      type: 'string',
-      required: true
-    },
-    companyId: {
+    _id: {
       type: 'string',
       required: true
     },

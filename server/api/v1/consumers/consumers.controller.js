@@ -1,10 +1,15 @@
 const dataLayer = require('./consumers.datalayer')
 
 exports.updateProductStatus = function (req, res) {
-  dataLayer.findOne({companyId: req.body.companyId, userId: req.body.userId})
+  console.log('req.body', req.body)
+  dataLayer.findOne({_id: req.body._id})
     .then(consumer => {
+      console.log('consumer', (req.body.scope.value === 'true'))
+      consumer.scope[req.body.scope.key] = (req.body.scope.value === 'true')
+      console.log('consumer updated', consumer)
       dataLayer.saveObject(consumer)
         .then(updated => {
+          console.log('updated', updated)
           return res.status(200).json({
             status: 'success',
             payload: updated
