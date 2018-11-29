@@ -2,9 +2,7 @@ const config = require('./config/environment/index')
 
 module.exports = function (app) {
   const env = app.get('env')
-  // API middlewares go here
-  app.use('/api/v1/test', require('./api/v1/test'))
-  app.use('/api/consumers', require('./api/v1/consumers'))
+  // Exposed API middlewares go here
   app.use('/api/livechat', require('./api/v1/kibochat/liveChat'))
   app.use('/api/sessions', require('./api/v1/kibochat/sessions'))
   app.use('/api/bots', require('./api/v1/kibochat/smartReplies'))
@@ -22,11 +20,11 @@ module.exports = function (app) {
   app.use('/api/surveys', require('./api/v1/kiboengage/surveys'))
   app.use('/api/templates', require('./api/v1/kiboengage/templates'))
   app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
-  // index page
-  // app.get('/', function (req, res) {
-  //   res.render('layouts/index')
-  // })
 
+  // internal API
+  app.use('/api/consumers', require('./api/v1/consumers'))
+
+  // first page
   app.get('/', (req, res) => {
     console.log('req.user', req)
     res.cookie('environment', config.env,
@@ -35,15 +33,12 @@ module.exports = function (app) {
     res.render('pages/index', { environment: env })
   })
 
+  // second page
   app.get('/product', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
     // res.sendFile(path.join(config.root, 'client/index.html'))
     res.render('pages/productAccess')
-  })
-
-  app.get('/', (req, res) => {
-    res.sendFile('./../client/build/index.html')
   })
 
   app.route('/:url(api|auth)/*').get((req, res) => {
