@@ -21,22 +21,21 @@ function isAuthenticated () {
     .use((req, res, next) => {
       logger.serverLog(TAG, `request ${util.inspect(req.headers)}`)
       // allow access_token to be passed through query parameter as well
-      if (req.query && req.query.hasOwnProperty('access_token')) {
-        req.headers.authorization = `Bearer ${req.query.access_token}`
-      }
-
+      // if (req.query && req.query.hasOwnProperty('access_token')) {
+      //   req.headers.authorization = `Bearer ${req.query.access_token}`
+      // }
+      let token = req.headers.cookie.substring(req.headers.cookie.indexOf('=') + 1, req.headers.cookie.indexOf(';'))
       let headers = {
         'content-type': 'application/json',
-        'Authorization': req.headers.authorization
+        'Authorization': `Bearer ${token}`
       }
       let path = config.ACCOUNTS_URL.slice(0, config.ACCOUNTS_URL.length - 7)
       let options = {
         method: 'GET',
-        uri: `${path}/auth/verify`,
+        uri: `${path}auth/verify`,
         headers,
         json: true
       }
-
       requestPromise(options)
         .then(result => {
           // logger.serverLog(TAG, `response got ${result}`)
@@ -60,14 +59,13 @@ function isAuthenticatedExternal () {
   // Validate jwt or api keys
     .use((req, res, next) => {
       if (req.headers.hasOwnProperty('api_secret') && req.headers.hasOwnProperty('api_key')) {
-        console.log('APP ID', req.headers['api_key'], req.headers['api_secret'])
         let credentials = {
           'api_key': req.headers['api_key'],
           'api_secret': req.headers['api_secret']
         }
         ConsumersDataLayer.findOne({credentials})
           .then(consumer => {
-            req.user = consumer
+            req.consumer = consumer
             next()
           })
           .catch(err => {
