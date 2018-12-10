@@ -26,12 +26,11 @@ module.exports = function (app, httpapp, config) {
   const server = http.createServer(httpapp)
   const httpsServer = https.createServer(options, app)
 
-  // if (['production', 'staging'].indexOf(config.env) > -1) {
-  //   httpapp.get('*', (req, res) => {
-  //     console.log('commented code', config.domain, req.url)
-  //     res.redirect(`${config.domain}${req.url}`)
-  //   })
-  // }
+  if (['production', 'staging'].indexOf(config.env) > -1) {
+    httpapp.get('*', (req, res) => {
+      res.redirect(`http://142.93.66.26${req.url}`)
+    })
+  }
 
   server.listen(config.port, () => {
     logger.serverLog(TAG, `KiboAPI server STARTED on ${
