@@ -28,7 +28,7 @@ module.exports = function (app, httpapp, config) {
 
   if (['production', 'staging'].indexOf(config.env) > -1) {
     httpapp.get('*', (req, res) => {
-      res.redirect(`http://142.93.66.26${req.url}`)
+      res.redirect(`${config.domain}${req.url}`)
     })
   }
 
