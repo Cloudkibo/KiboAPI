@@ -69,46 +69,6 @@ function isAuthenticated () {
 }
 
 function validateApiKeys (req, res, next) {
-  console.log('APP ID', req.headers['app_id'], req.headers['app_secret'])
-  if (req.headers.hasOwnProperty('app_secret')) {
-    apiCaller.callApi(`api_settings/query`, 'post', {
-      app_id: req.headers['app_id'],
-      app_secret: req.headers['app_secret'],
-      enabled: true
-    }, req.headers.authorization)
-      .then(setting => {
-        if (setting) {
-          console.log('Setting', setting.company_id)
-          // todo this is for now buyer user id but it should be company id as thought
-          apiCaller.callApi(`user/query`, 'post', {_id: setting.company_id, role: 'buyer'}, req.headers.authorization)
-            .then(users => {
-              console.log('Logged In User', users[0]._id)
-              req.user = users[0]
-              next()
-            })
-            .catch(err => {
-              return res.status(500)
-                .json({status: 'failed', description: `Internal Server Error: ${err}`})
-            })
-        } else {
-          return res.status(401).json({
-            status: 'failed',
-            description: 'Unauthorized. No such API credentials found.'
-          })
-        }
-      })
-      .catch(err => {
-        return next(err)
-      })
-  } else {
-    return res.status(401).json({
-      status: 'failed',
-      description: 'Unauthorized. Please provide both app_id and app_secret in headers.'
-    })
-  }
-}
-
-function isAuthenticatedExternal () {
   return compose()
   // Validate jwt or api keys
     .use((req, res, next) => {
@@ -123,6 +83,48 @@ function isAuthenticatedExternal () {
             console.log('Consumer', consumer)
             req.consumer = consumer
             next()
+          })
+          .catch(err => {
+            return res.status(401).json({
+              status: 'failed ' + err,
+              description: 'Unauthorized. Please provide both api_key and api_secret in headers.'
+            })
+          }
+          )
+      } else {
+        return res.status(401).json({
+          status: 'failed',
+          description: 'Unauthorized. Please provide both api_key and api_secret in headers.'
+        })
+      }
+    })
+}
+
+function isAuthenticatedExternal (product) {
+  return compose()
+  // Validate jwt or api keys
+    .use((req, res, next) => {
+      if (req.headers.hasOwnProperty('api_secret') && req.headers.hasOwnProperty('api_key')) {
+        let credentials = {
+          'api_key': req.headers['api_key'],
+          'api_secret': req.headers['api_secret']
+        }
+        console.log('Credentials', credentials)
+        ConsumersDataLayer.findOne({credentials})
+          .then(consumer => {
+            console.log('Consumer', consumer)
+            let scope = consumer.scope
+            console.log('Scope', product, scope[product])
+            if (scope[product]) {
+              req.consumer = consumer
+              req.headers['consumer_id'] = consumer.consumerId.userId
+              next()
+            } else {
+              return res.status(401).json({
+                status: 'failed ',
+                description: `Access for the Product - ${product} - denied`
+              })
+            }
           })
           .catch(err => {
             return res.status(401).json({

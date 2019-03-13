@@ -5,15 +5,15 @@ exports.updateProductStatusPayload = {
       type: 'string',
       required: true
     },
-    kiboChat: {
+    kibochat: {
       type: 'boolean',
       required: false
     },
-    kiboEngage: {
+    kiboengage: {
       type: 'boolean',
       required: false
     },
-    kiboCommerce: {
+    kibocommerce: {
       type: 'boolean',
       required: false
     }

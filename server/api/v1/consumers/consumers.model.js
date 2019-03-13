@@ -12,7 +12,7 @@ let consumerSchema = new Schema({
   },
   scope: {
     type: Schema.Types.Mixed,
-    default: {kiboPush: false, kiboCommerce: false, kiboEngage: false}
+    default: {kibochat: false, kibocommerce: false, kiboengage: false}
   }
 })
 

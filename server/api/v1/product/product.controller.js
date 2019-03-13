@@ -10,7 +10,7 @@ exports.index = function (req, res) {
         var consumerPayload = {
           consumerId: { userId: req.user._id, companyId: req.user.companyId },
           credentials: {api_key: apiKey, api_secret: apiSecret},
-          scope: { kiboPush: false, kiboEngage: false, kiboCommerce: false }
+          scope: { kibochat: false, kiboengage: false, kibocommerce: false }
         }
         console.log('consumerPayload', consumerPayload)
         dataLayer.createObject(consumerPayload)

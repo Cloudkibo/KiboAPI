@@ -4,12 +4,12 @@ const config = require('../../../config/environment/index')
 // const TAG = 'api/v1/utility/index.js'
 // const util = require('util')
 
-exports.callApi = (endpoint, method = 'get', body, token, type = 'accounts') => {
+exports.callApi = (endpoint, method = 'get', body, consumerId, type = 'accounts') => {
   let headers
-  if (token && token !== '') {
+  if (consumerId && consumerId !== '') {
     headers = {
       'content-type': 'application/json',
-      'Authorization': token
+      'consumer_id': consumerId
     }
   } else {
     headers = {

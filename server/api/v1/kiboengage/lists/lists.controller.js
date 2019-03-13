@@ -1,7 +1,7 @@
 const utility = require('../../utility')
 
 exports.allLists = function (req, res) {
-  utility.callApi(`lists`, 'get', {}, req.headers.authorization, 'kiboengage')
+  utility.callApi(`lists/allLists`, 'get', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
