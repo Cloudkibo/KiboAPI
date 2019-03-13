@@ -21,35 +21,40 @@ module.exports = function (app) {
   app.use('/api/surveys', require('./api/v1/kiboengage/surveys'))
   app.use('/api/templates', require('./api/v1/kiboengage/templates'))
   app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
+  app.use('/product', require('./api/v1/product/'))
 
   // internal API
   app.use('/api/consumers', require('./api/v1/consumers'))
 
   // first page
   app.get('/', auth.isAuthenticated(), (req, res) => {
-    console.log('req.user', req.user)
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
     // res.sendFile(path.join(config.root, 'client/index.html'))
-    res.render('pages/index', { environment: env, user: req.user })
+    if (req.user) {
+      dataLayer.findOne({'consumerId.companyId': req.user.companyId, 'consumerId.userId': req.user._id})
+        .then(consumer => {
+          if (!consumer) {
+            res.render('pages/index', { environment: env, user: req.user })
+          } else {
+            res.redirect('/product')
+          }
+        })
+        .catch(err => {
+          return res.status(500).json({
+            status: 'failed',
+            payload: `Failed to find consumer ${JSON.stringify(err)}`
+          })
+        })
+    } else {
+      res.render('pages/index', { environment: env, user: req.user })
+    }
   })
 
-  // second page
-  app.get('/product', auth.isAuthenticated(), (req, res) => {
-    res.cookie('environment', config.env,
-      {expires: new Date(Date.now() + 900000)})
-    dataLayer.findOne({companyId: req.user.companyId, userId: req.user._id})
-    // dataLayer.findOne({'consumerId.companyId': 'da', 'consumerId.userId': 'sad'})
-      .then(consumer => {
-        res.render('pages/productAccess', {consumer: consumer, user: req.user})
-      })
-      .catch(error => {
-        return res.status(500).json({
-          status: 'failed',
-          payload: `Failed to find consumer ${JSON.stringify(error)}`
-        })
-      })
-    // res.sendFile(path.join(config.root, 'client/index.html'))
+  app.get('/logout', (req, res) => {
+    console.log('Request', req.cookies)
+    res.clearCookie('token')
+    res.redirect('/')
   })
 
   app.route('/:url(api|auth)/*').get((req, res) => {

@@ -7,8 +7,8 @@ exports.updateProductStatus = function (req, res) {
     .then(consumer => {
       console.log('consumer', (req.body.scope.value === 'true'))
       consumer.scope[req.body.scope.key] = (req.body.scope.value === 'true')
-      console.log('consumer updated', consumer)
-      dataLayer.saveObject(consumer)
+      console.log('consumer updated', consumer.scope)
+      dataLayer.updateObject({_id: req.body._id}, {scope: consumer.scope}, {new: true})
         .then(updated => {
           console.log('updated', updated)
           return res.status(200).json({

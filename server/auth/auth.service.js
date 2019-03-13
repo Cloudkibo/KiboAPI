@@ -9,6 +9,7 @@ const util = require('util')
 const logger = require('../components/logger')
 const requestPromise = require('request-promise')
 const TAG = 'auth/auth.service.js'
+const apiCaller = require('../api/v1/utility')
 const ConsumersDataLayer = require('../api/v1/consumers/consumers.datalayer')
 
 /**
@@ -19,39 +20,92 @@ function isAuthenticated () {
   return compose()
   // Validate jwt or api keys
     .use((req, res, next) => {
-      logger.serverLog(TAG, `request ${util.inspect(req.headers)}`)
-      // allow access_token to be passed through query parameter as well
-      // if (req.query && req.query.hasOwnProperty('access_token')) {
-      //   req.headers.authorization = `Bearer ${req.query.access_token}`
-      // }
-      let token = req.headers.cookie.substring(req.headers.cookie.indexOf('=') + 1, req.headers.cookie.indexOf(';'))
-      let headers = {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-      let path = config.ACCOUNTS_URL.slice(0, config.ACCOUNTS_URL.length - 7)
-      let options = {
-        method: 'GET',
-        uri: `${path}auth/verify`,
-        headers,
-        json: true
-      }
-      requestPromise(options)
-        .then(result => {
-          // logger.serverLog(TAG, `response got ${result}`)
-          if (result.status === 'success') {
-            req.user = result.user
-            next()
-          } else {
-            return res.status(401)
-              .json({status: 'failed', description: 'Unauthorized'})
+      if (req.headers.hasOwnProperty('app_id')) {
+        validateApiKeys(req, res, next)
+      } else {
+        // allow access_token to be passed through query parameter as well
+        if (req.cookies.token) {
+          req.headers.authorization = `Bearer ${req.cookies.token}`
+          if (req.query && req.query.hasOwnProperty('access_token')) {
+            req.headers.authorization = `Bearer ${req.query.access_token}`
           }
-        })
-        .catch(err => {
-          return res.status(500)
-            .json({status: 'failed', description: `Internal Server Error: ${err}`})
-        })
+          let headers = {
+            'content-type': 'application/json',
+            'Authorization': req.headers.authorization
+          }
+          let path = config.api_urls['accounts'].slice(0, config.api_urls['accounts'].length - 7)
+          let options = {
+            method: 'GET',
+            uri: `${path}/auth/verify`,
+            headers,
+            json: true
+          }
+
+          requestPromise(options)
+            .then(result => {
+              // logger.serverLog(TAG, `response got ${result}`)
+              if (result.status === 'success') {
+                req.user = result.user
+                next()
+              } else {
+                return res.status(401)
+                  .json({status: 'failed', description: 'Unauthorized'})
+              }
+            })
+            .catch(err => {
+              if (err.statusCode && err.statusCode === 401) {
+                return res.status(401)
+                  .json({status: 'Unauthorized', description: 'jwt expired'})
+              } else {
+                return res.status(500)
+                  .json({status: 'failed', description: `Internal Server Error: ${err}`})
+              }
+            })
+        } else {
+          next()
+        }
+      }
     })
+}
+
+function validateApiKeys (req, res, next) {
+  console.log('APP ID', req.headers['app_id'], req.headers['app_secret'])
+  if (req.headers.hasOwnProperty('app_secret')) {
+    apiCaller.callApi(`api_settings/query`, 'post', {
+      app_id: req.headers['app_id'],
+      app_secret: req.headers['app_secret'],
+      enabled: true
+    }, req.headers.authorization)
+      .then(setting => {
+        if (setting) {
+          console.log('Setting', setting.company_id)
+          // todo this is for now buyer user id but it should be company id as thought
+          apiCaller.callApi(`user/query`, 'post', {_id: setting.company_id, role: 'buyer'}, req.headers.authorization)
+            .then(users => {
+              console.log('Logged In User', users[0]._id)
+              req.user = users[0]
+              next()
+            })
+            .catch(err => {
+              return res.status(500)
+                .json({status: 'failed', description: `Internal Server Error: ${err}`})
+            })
+        } else {
+          return res.status(401).json({
+            status: 'failed',
+            description: 'Unauthorized. No such API credentials found.'
+          })
+        }
+      })
+      .catch(err => {
+        return next(err)
+      })
+  } else {
+    return res.status(401).json({
+      status: 'failed',
+      description: 'Unauthorized. Please provide both app_id and app_secret in headers.'
+    })
+  }
 }
 
 function isAuthenticatedExternal () {
@@ -63,8 +117,10 @@ function isAuthenticatedExternal () {
           'api_key': req.headers['api_key'],
           'api_secret': req.headers['api_secret']
         }
+        console.log('Credentials', credentials)
         ConsumersDataLayer.findOne({credentials})
           .then(consumer => {
+            console.log('Consumer', consumer)
             req.consumer = consumer
             next()
           })
