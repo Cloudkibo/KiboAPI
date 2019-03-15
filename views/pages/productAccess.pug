@@ -1,8 +1,8 @@
 
 doctype html
 html(lang='en')
-  include ../partials/head.pug  
-  include ../partials/handlerScripts.pug  
+  include ../partials/head.pug
+  include ../partials/handlerScripts.pug
     div(class='m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body')
       div(class='m-grid__item m-grid__item--fluid m-wrapper')
         div(class='m-content')
@@ -11,13 +11,13 @@ html(lang='en')
             div(class='col-md-4')
               div(style='display:flex')
                 span(class="col-form-label" style='font-weight: 500;font-size: larger;width: 120px') API Key:
-                input(class="form-control" value=consumer.credentials.api_key)   
+                input(class="form-control" value=consumer.credentials.api_key)
             div(class='col-md-4')
               div(style='display:flex')
                 span(class="col-form-label" style='font-weight: 500;font-size: larger;width:120px') API Secret:
                 div(class='input-group')
                   input(class="form-control m-input" type='password' value=consumer.credentials.api_secret id='secret')
-                  span(class="input-group-addon span-style" id="showButton" style='background-color:#c3c8d8;cursor:pointer') Show  
+                  span(class="input-group-addon span-style" id="showButton" style='background-color:#c3c8d8;cursor:pointer') Show
             div(class='col-md-2')
           br
           br
@@ -32,16 +32,16 @@ html(lang='en')
                         div(style='border: 1px solid rgb(204, 204, 204)')
                           h1(style='font-size:5rem') KE
                     div(class='col-md-8')
-                      h3 KiboEngage
+                      h3 kiboengage
                       br
                       span(class='m-switch m-switch--icon m-switch--success')
                         label
-                          if consumer.scope.kiboEngage
+                          if consumer.scope.kiboengage
                             input(type='checkbox' name='' checked class='switch-btn' id='KE' onchange=`changeProductStatus(${JSON.stringify(consumer)})`)
-                          else 
+                          else
                             input(type='checkbox' name='' class='switch-btn' id='KE' onchange=`changeProductStatus(${JSON.stringify(consumer)})`)
                           span
-            div(class='col-md-4')  
+            div(class='col-md-4')
               div(class='m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
                 div(class='m-portlet__body')
                   div(class='row')
@@ -54,20 +54,19 @@ html(lang='en')
                       br
                       span(class='m-switch m-switch--icon m-switch--success')
                         label
-                          if consumer.scope.kiboChat
+                          if consumer.scope.kibochat
                             input(type='checkbox' name='' checked class='switch-btn' id='KC' onchange=`changeProductStatus(${JSON.stringify(consumer)})`)
                           else
                             input(type='checkbox' name='' class='switch-btn' id='KC' onchange=`changeProductStatus(${JSON.stringify(consumer)})`)
-                          span    
+                          span
           br
           br
           div(class='row')
             div(class='col-md-2')
-            div(class='col-md-8')      
+            div(class='col-md-8')
               div(class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-dismissible m--margin-bottom-30" role="alert")
                 div(class="m-alert__icon")
                   i(class="flaticon-exclamation m--font-brand")
-                div(class="m-alert__text" style='font-size: initial') To view our API documentation, please click  
+                div(class="m-alert__text" style='font-size: initial') To view our API documentation, please click
                   a(href='#')     here
-            div(class='col-md-2')   
-      
+            div(class='col-md-2')

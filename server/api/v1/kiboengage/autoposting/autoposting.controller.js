@@ -1,7 +1,7 @@
 const utility = require('../../utility')
 
 exports.index = function (req, res) {
-  utility.callApi(`autoposting`, 'get', {}, req.headers.authorization, 'kiboengage')
+  utility.callApi(`autoposting`, 'get', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -11,7 +11,7 @@ exports.index = function (req, res) {
 }
 
 exports.create = function (req, res) {
-  utility.callApi(`autoposting/create`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`autoposting/create`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -20,7 +20,7 @@ exports.create = function (req, res) {
     })
 }
 exports.edit = function (req, res) {
-  utility.callApi(`autoposting/edit`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`autoposting/edit`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -30,7 +30,7 @@ exports.edit = function (req, res) {
 }
 
 exports.destroy = function (req, res) {
-  utility.callApi(`autoposting/${req.params.id}`, 'delete', {}, req.headers.authorization, 'kiboengage')
+  utility.callApi(`autoposting/${req.params.id}`, 'delete', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })

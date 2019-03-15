@@ -2,7 +2,7 @@
 // ==================================
 module.exports = {
   // Server port
-  port: process.env.PORT || 8000,
+  port: process.env.PORT || 3023,
 
   // Secure Server port
   secure_port: process.env.SECURE_PORT || 8443,
@@ -15,7 +15,14 @@ module.exports = {
   },
   seedDB: false,
 
-  ACCOUNTS_URL: 'https://accounts.cloudkibo.com/api/v1/',
-  KIBOENGAGE_URL: 'https://kiboengage.cloudkibo.com/api/v1/',
-  KIBOCHAT_URL: 'https://kibochat.cloudkibo.com/api/v1/'
+  api_urls: {
+    webhook: 'https://webhook.cloudkibo.com/api',
+    kibopush: 'https://app.kibopush.com/api',
+    accounts: 'https://accounts.cloudkibo.com/api/v1',
+    kiboengage: 'https://kiboengage.cloudkibo.com/api',
+    kibochat: 'https://kibochat.cloudkibo.com/api',
+    // kibochat: `${process.env.DB_LAYER_IP_KIBOCHAT}/api/v1`,
+    // kiboengage: `${process.env.DB_LAYER_IP_KIBOENGAGE}/api/v1`,
+    kibodash: `${process.env.KIBODASH}/api/v1`
+  }
 }
