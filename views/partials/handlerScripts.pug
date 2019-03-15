@@ -1,6 +1,6 @@
 
 script.
-  
+
   $(document).ready(function() {
     $("#showButton").click(function (e) {
       if (document.getElementById('showButton').innerHTML === 'Show') {
@@ -13,17 +13,17 @@ script.
       }
     })
   })
-  
+
   function changeProductStatus(consumer) {
     let payload = {
       _id: consumer._id,
       scope: {}
-    }   
+    }
     if (event.target.id === 'KC') {
-      payload.scope.key = 'kiboChat'
+      payload.scope.key = 'kibochat'
       payload.scope.value = event.target.checked
     } else if (event.target.id === 'KE') {
-      payload.scope.key = 'kiboEngage'
+      payload.scope.key = 'kiboengage'
       payload.scope.value = event.target.checked
     }
     console.log('payload', payload)
@@ -44,4 +44,4 @@ script.
             "alertMsg").innerHTML = request.responseJSON.payload
       }
     })
-  } 
+  }

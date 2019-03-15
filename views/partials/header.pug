@@ -22,7 +22,7 @@ html(lang="en")
                             img(src='https://cdn.cloudkibo.com/public/icons/users.jpg' class='m--img-rounded m--marginless m--img-centered' alt='')
                         div(style='display:inline-block;height:41px')
                           if user
-                            span(class='m-nav__link-text' style='line-height:41px;vertical-align:middle;text-align:center') #{user.name} 
+                            span(class='m-nav__link-text' style='line-height:41px;vertical-align:middle;text-align:center') #{user.name}
                               i(class='fa fa-chevron-down')
                           else
                             span(class='m-nav__link-text' style='line-height:41px;vertical-align:middle;text-align:center') Username
@@ -40,12 +40,12 @@ html(lang="en")
                             div(class='m-card-user__details')
                               if user
                                 span(class='m-card-user__name m--font-weight-500') #{user.name}
-                              else 
+                              else
                                 span(class='m-card-user__name m--font-weight-500') &#32;User&#32;name
                         div(class='m-dropdown__body')
                           div(class='m-dropdown__content')
                             ul(class='m-nav m-nav--skin-light')
                               li(class='m-nav__item')
-                                a(class='btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder') Logout
+                                a(class='btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder' href='/logout') Logout
                 li(class='btn btn-sm m-btn m-btn--pill m-btn--gradient-from-focus m-btn--gradient-to-danger')
                   a(href='/docs' target='_blank' style='color: white;text-decoration:none;') Documentation

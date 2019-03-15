@@ -1,7 +1,8 @@
 const ConsumerModel = require('./consumers.model')
 
-exports.saveObject = (consumer) => {
-  return consumer.save()
+exports.updateObject = (query, updated, options) => {
+  return ConsumerModel.findByIdAndUpdate(query, updated, options)
+    .exec()
 }
 exports.findOne = (query) => {
   return ConsumerModel.findOne(query)
