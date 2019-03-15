@@ -24,6 +24,7 @@ function isAuthenticated () {
         validateApiKeys(req, res, next)
       } else {
         // allow access_token to be passed through query parameter as well
+        console.log('Req Cookies Token', req.cookies.token)
         if (req.cookies.token) {
           req.headers.authorization = `Bearer ${req.cookies.token}`
           if (req.query && req.query.hasOwnProperty('access_token')) {
@@ -44,6 +45,7 @@ function isAuthenticated () {
           requestPromise(options)
             .then(result => {
               // logger.serverLog(TAG, `response got ${result}`)
+              console.log(`response got`, result)
               if (result.status === 'success') {
                 req.user = result.user
                 next()
