@@ -31,9 +31,11 @@ module.exports = function (app) {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
     // res.sendFile(path.join(config.root, 'client/index.html'))
+    console.log('User', req.user)
     if (req.user) {
       dataLayer.findOne({'consumerId.companyId': req.user.companyId, 'consumerId.userId': req.user._id})
         .then(consumer => {
+          console.log('consumer', consumer)
           if (!consumer) {
             res.render('pages/index', { environment: env, user: req.user })
           } else {
