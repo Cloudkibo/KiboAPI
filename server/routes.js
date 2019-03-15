@@ -54,7 +54,7 @@ module.exports = function (app) {
   app.get('/logout', (req, res) => {
     console.log('Request', req.cookies)
     res.clearCookie('token')
-    res.redirect('/')
+    redirectToLogoutAccounts(req, res)
   })
 
   app.route('/:url(api|auth)/*').get((req, res) => {
@@ -68,4 +68,19 @@ module.exports = function (app) {
   }).post((req, res) => {
     res.redirect('/')
   })
+}
+
+function redirectToLogoutAccounts (req, res) {
+  console.log(req.get('host'))
+  let redirectUrls = {
+    'kiboapi': 'https://accounts.cloudkibo.com/auth/logout?continue=http:/kiboapi.cloudkibo.com',
+    'localhost:3023': 'http://localhost:3024/auth/logout?continue=http://localhost:3023'
+  }
+  let products = Object.keys(redirectUrls)
+  for (let i = 0; i < products.length; i++) {
+    if (req.get('host').includes(products[i])) {
+      res.redirect(redirectUrls[products[i]])
+      break
+    }
+  }
 }
