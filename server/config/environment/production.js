@@ -16,12 +16,13 @@ module.exports = {
   seedDB: false,
 
   api_urls: {
-    webhook: 'http://localhost:3020/api',
-    kibopush: 'http://localhost:3000/api',
-    accounts: 'http://localhost:3024/api/v1',
-    chat: 'http://localhost:3022/api',
-    kibochat: `http://localhost:3022/api`,
-    kiboengage: `http://localhost:3021/api`,
-    kibodash: `http://localhost:5050/api/v1`
+    webhook: 'https://webhook.cloudkibo.com/api',
+    kibopush: 'https://app.kibopush.com/api',
+    accounts: 'https://accounts.cloudkibo.com/api/v1',
+    kiboengage: 'https://kiboengage.cloudkibo.com/api',
+    kibochat: 'https://kibochat.cloudkibo.com/api',
+    // kibochat: `${process.env.DB_LAYER_IP_KIBOCHAT}/api/v1`,
+    // kiboengage: `${process.env.DB_LAYER_IP_KIBOENGAGE}/api/v1`,
+    kibodash: `${process.env.KIBODASH}/api/v1`
   }
 }
