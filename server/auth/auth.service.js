@@ -122,7 +122,7 @@ function isAuthenticatedExternal (product) {
             } else {
               return res.status(401).json({
                 status: 'failed ',
-                description: `Access for the Product - ${product} - denied`
+                description: `Access for the Product - ${product} - denied. API is not enabled from developer dashboard`
               })
             }
           })
