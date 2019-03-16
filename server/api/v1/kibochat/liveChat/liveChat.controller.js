@@ -1,9 +1,9 @@
 const utility = require('../../utility')
 
 exports.index = function (req, res) {
-  utility.callApi(`livechat/${req.params.session_id}`, 'post', req.body, req.headers.authorization, 'kibochat')
+  utility.callApi(`livechat/${req.params.session_id}`, 'post', req.body, req.headers.consumer_id, 'kibochat')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -11,9 +11,9 @@ exports.index = function (req, res) {
 }
 
 exports.search = function (req, res) {
-  utility.callApi(`livechat/search`, 'post', req.body, req.headers.authorization, 'kibochat')
+  utility.callApi(`livechat/search`, 'post', req.body, req.headers.consumer_id, 'kibochat')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -21,9 +21,9 @@ exports.search = function (req, res) {
 }
 
 exports.update = function (req, res) {
-  utility.callApi(`livechat/updateUrl`, 'post', req.body, req.headers.authorization, 'kibochat')
+  utility.callApi(`livechat/updateUrl`, 'post', req.body, req.headers.consumer_id, 'kibochat')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -31,9 +31,9 @@ exports.update = function (req, res) {
 }
 
 exports.geturlmeta = function (req, res) {
-  utility.callApi(`livechat/getUrlMeta`, 'post', req.body, req.headers.authorization, 'kibochat')
+  utility.callApi(`livechat/getUrlMeta`, 'post', req.body, req.headers.consumer_id, 'kibochat')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -50,9 +50,9 @@ exports.geturlmeta = function (req, res) {
 * 6. Create AutomationQueue Object
 */
 exports.create = function (req, res) {
-  utility.callApi(`livechat`, 'post', req.body, req.headers.authorization, 'kibochat')
+  utility.callApi(`livechat`, 'post', req.body, req.headers.consumer_id, 'kibochat')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})

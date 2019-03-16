@@ -6,7 +6,7 @@
 const utility = require('../../utility')
 
 exports.allSurveys = function (req, res) {
-  utility.callApi(`surveys/allSurveys`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/allSurveys`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -16,7 +16,7 @@ exports.allSurveys = function (req, res) {
 }
 
 exports.create = function (req, res) {
-  utility.callApi(`surveys/create`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/create`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -26,7 +26,7 @@ exports.create = function (req, res) {
 }
 
 exports.edit = function (req, res) {
-  utility.callApi(`surveys/edit`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/edit`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -37,7 +37,7 @@ exports.edit = function (req, res) {
 
 // Get a single survey
 exports.show = function (req, res) {
-  utility.callApi(`surveys/${req.params.id}`, 'get', {}, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/${req.params.id}`, 'get', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -48,7 +48,7 @@ exports.show = function (req, res) {
 
 // Get a single survey
 exports.showQuestions = function (req, res) {
-  utility.callApi(`surveys/showquestions/${req.params.id}`, 'get', {}, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/showquestions/${req.params.id}`, 'get', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -58,7 +58,7 @@ exports.showQuestions = function (req, res) {
 }
 
 exports.send = function (req, res) {
-  utility.callApi(`surveys/send`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/send`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -67,7 +67,7 @@ exports.send = function (req, res) {
     })
 }
 exports.sendSurvey = function (req, res) {
-  utility.callApi(`surveys/sendSurveyDirectly`, 'post', req.body, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/sendSurveyDirectly`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })
@@ -76,7 +76,7 @@ exports.sendSurvey = function (req, res) {
     })
 }
 exports.deleteSurvey = function (req, res) {
-  utility.callApi(`surveys/deleteSurvey/${req.params.id}`, 'delete', {}, req.headers.authorization, 'kiboengage')
+  utility.callApi(`surveys/deleteSurvey/${req.params.id}`, 'delete', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
       return res.status(500).json({ status: 'success', payload: response })
     })

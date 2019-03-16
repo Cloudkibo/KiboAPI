@@ -5,55 +5,55 @@ const express = require('express')
 const router = express.Router()
 
 const controller = require('./smartReplies.controller')
-// const auth = require('../../../auth/auth.service')
+const auth = require('../../../../auth/auth.service')
 const validate = require('express-jsonschema').validate
 const validationSchema = require('./validationSchema')
 
 router.get('/',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.index)
 
 router.get('/waitingReply',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.waitingReply)
 
 router.post('/create',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.createPayload}),
   controller.create)
 
 router.post('/edit',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.editPayload}),
   controller.edit)
 
 router.post('/delete',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.deletePayload}),
   controller.delete)
 
 router.post('/updateStatus',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.updateStatusPayload}),
   controller.status)
 
 router.post('/botDetails',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.botDetailsPayload}),
   controller.details)
 
 router.post('/fetchUnansweredQueries',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.unAnsweredQueriesPayload}),
   controller.unAnsweredQueries)
 
 router.post('/fetchWaitingSubscribers',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.waitSubscribersPayload}),
   controller.waitSubscribers)
 
 router.post('/removeWaitingSubscribers',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.removeWaitSubscribersPayload}),
   controller.removeWaitSubscribers)
 

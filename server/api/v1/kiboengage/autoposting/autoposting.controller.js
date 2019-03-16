@@ -3,7 +3,7 @@ const utility = require('../../utility')
 exports.index = function (req, res) {
   utility.callApi(`autoposting`, 'get', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -13,7 +13,7 @@ exports.index = function (req, res) {
 exports.create = function (req, res) {
   utility.callApi(`autoposting/create`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -22,7 +22,7 @@ exports.create = function (req, res) {
 exports.edit = function (req, res) {
   utility.callApi(`autoposting/edit`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
@@ -32,7 +32,7 @@ exports.edit = function (req, res) {
 exports.destroy = function (req, res) {
   utility.callApi(`autoposting/${req.params.id}`, 'delete', {}, req.headers.consumer_id, 'kiboengage')
     .then(response => {
-      return res.status(500).json({ status: 'success', payload: response })
+      return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
       return res.status(500).json({status: 'failed', payload: err})
