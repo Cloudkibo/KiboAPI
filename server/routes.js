@@ -30,6 +30,7 @@ module.exports = function (app) {
   app.get('/', auth.isAuthenticated(), (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
+    console.log('Route 1')
     // res.sendFile(path.join(config.root, 'client/index.html'))
     console.log('User', req.user)
     if (req.user) {
@@ -66,8 +67,10 @@ module.exports = function (app) {
   })
 
   app.route('/*').get((req, res) => {
+    console.log('Route 2')
     res.redirect('/')
   }).post((req, res) => {
+    console.log('Route 3')
     res.redirect('/')
   })
 }
