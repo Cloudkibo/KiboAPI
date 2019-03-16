@@ -8,7 +8,7 @@ const swaggerTools = require('swagger-tools')
 const app = express()
 const httpApp = express()
 
-const appObj = httpApp // (config.env === 'production' || config.env === 'staging') ? app : httpApp
+const appObj = (config.env === 'production' || config.env === 'staging') ? app : httpApp
 
 mongoose.connect(config.mongo.uri, config.mongo.options)
 

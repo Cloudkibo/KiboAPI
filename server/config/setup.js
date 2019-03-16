@@ -1,6 +1,6 @@
 const http = require('http')
 const https = require('https')
-// const fs = require('fs')
+const fs = require('fs')
 const logger = require('./../components/logger')
 const TAG = 'config/setup.js'
 
@@ -11,26 +11,26 @@ module.exports = function (app, httpapp, config) {
     cert: ''
   }
 
-  // if (['production', 'staging'].indexOf(config.env) > -1) {
-  //   try {
-  //     options = {
-  //       ca: fs.readFileSync('/root/certs/kiboapi.ca-bundle'),
-  //       key: fs.readFileSync('/root/certs/kiboapi.key'),
-  //       cert: fs.readFileSync('/root/certs/kiboapi.crt')
-  //     }
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+  if (['production', 'staging'].indexOf(config.env) > -1) {
+    try {
+      options = {
+        ca: fs.readFileSync('/root/certs/kiboapi.ca-bundle'),
+        key: fs.readFileSync('/root/certs/kiboapi.key'),
+        cert: fs.readFileSync('/root/certs/kiboapi.crt')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const server = http.createServer(httpapp)
   const httpsServer = https.createServer(options, app)
 
-  // if (['production', 'staging'].indexOf(config.env) > -1) {
-  //   httpapp.get('*', (req, res) => {
-  //     res.redirect(`${config.domain}${req.url}`)
-  //   })
-  // }
+  if (['production', 'staging'].indexOf(config.env) > -1) {
+    httpapp.get('*', (req, res) => {
+      res.redirect(`${config.domain}${req.url}`)
+    })
+  }
 
   server.listen(config.port, () => {
     logger.serverLog(TAG, `KiboAPI server STARTED on ${
