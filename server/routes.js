@@ -27,31 +27,10 @@ module.exports = function (app) {
   app.use('/api/consumers', require('./api/v1/consumers'))
 
   // first page
-  app.get('/', auth.isAuthenticated(), (req, res) => {
+  app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
-    console.log('Route 1')
-    // res.sendFile(path.join(config.root, 'client/index.html'))
-    console.log('User', req.user)
-    if (req.user) {
-      dataLayer.findOne({'consumerId.companyId': req.user.companyId, 'consumerId.userId': req.user._id})
-        .then(consumer => {
-          console.log('consumer', consumer)
-          if (!consumer) {
-            res.render('pages/index', { environment: env, user: req.user })
-          } else {
-            res.redirect('/product')
-          }
-        })
-        .catch(err => {
-          return res.status(500).json({
-            status: 'failed',
-            payload: `Failed to find consumer ${JSON.stringify(err)}`
-          })
-        })
-    } else {
-      res.render('pages/index', { environment: env, user: req.user })
-    }
+    res.render('pages/index', { environment: env, user: req.user })
   })
 
   app.get('/logout', (req, res) => {
