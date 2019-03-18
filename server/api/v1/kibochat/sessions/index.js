@@ -43,10 +43,10 @@ router.post('/assignTeam',
   validate({body: validationSchema.assignTeamPayload}),
   controller.assignTeam)
 
-router.post('/unSubscribe',
+/* router.post('/unSubscribe',
   auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.unSubscribePayload}),
-  controller.unSubscribe)
+  controller.unSubscribe) */
 
 router.post('/query',
   auth.isAuthenticatedExternal('kibochat'),
