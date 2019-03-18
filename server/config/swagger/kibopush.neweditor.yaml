@@ -14,11 +14,11 @@ info:
     Build something great!
 
     ## Basic Usage
-    All KiboPush API requests start with `https://app.kibopush.com/api/`
+    All KiboPush API requests start with `https://kiboapi.cloudkibo.com/api/`
 
     The next segment of the URI path depends on the type of request. For example:
 
-    `https://app.kibopush.com/api/users/`
+    `https://kiboapi.cloudkibo.com/api/users/`
 
     to get information of logged in user.
 
@@ -37,7 +37,7 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
-host: app.kibopush.com
+host: kiboapi.cloudkibo.com
 basePath: /api
 schemes:
   - https
