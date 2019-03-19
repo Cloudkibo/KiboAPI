@@ -24,7 +24,7 @@ function isAuthenticated () {
         validateApiKeys(req, res, next)
       } else {
         // allow access_token to be passed through query parameter as well
-        console.log('Req Cookies Token', req.headers.authorization)
+        console.log('Req Cookies Token', req.cookies.token)
         if (req.cookies.token) {
           req.headers.authorization = `Bearer ${req.cookies.token}`
           if (req.query && req.query.hasOwnProperty('access_token')) {
