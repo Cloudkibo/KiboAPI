@@ -1,6 +1,6 @@
 const config = require('./config/environment/index')
-const auth = require('./auth/auth.service')
 const dataLayer = require('./api/v1/consumers/consumers.datalayer')
+const utility = require('./api/v1/utility/index')
 module.exports = function (app) {
   const env = app.get('env')
   // Exposed API middlewares go here
@@ -30,7 +30,15 @@ module.exports = function (app) {
   app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
-    res.render('pages/index', { environment: env, user: req.user })
+    // rendering head to call authentication logic and get access token
+    res.render('partials/head', { environment: env, user: req.user }, function () {
+      // when the token is available get userId to see if the developer account is already made
+      if (req.cookies.token) {
+        utility.getLoggedInUser(req, res, env, redirectionLogic)
+      } else {
+        res.render('pages/index', { environment: env, user: req.user })
+      }
+    })
   })
 
   app.get('/logout', (req, res) => {
@@ -67,4 +75,17 @@ function redirectToLogoutAccounts (req, res) {
       break
     }
   }
+}
+function redirectionLogic (req, res, env, user) {
+  dataLayer.findOne({'consumerId.userId': user._id})
+    .then(consumer => {
+      if (consumer) {
+        res.render('pages/productAccess', {consumer: consumer, user: user})
+      } else {
+        res.render('pages/index', { environment: env, user: req.user })
+      }
+    })
+    .catch(err => {
+      console.log('Error in rediretion logic', err)
+    })
 }

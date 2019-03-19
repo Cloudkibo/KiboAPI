@@ -59,15 +59,18 @@ exports.enable = function (req, res) {
 }
 
 exports.reset = function (req, res) {
-  dataLayer.findOne({'consumerId.userId': req.user._id})
+  console.log(req.body._id)
+  dataLayer.findOne({_id: req.body._id})
     .then(consumer => {
+      console.log(consumer)
       let apiKey = crypto.randomBytes(10).toString('hex')
       let apiSecret = crypto.randomBytes(18).toString('hex')
       consumer.credentials = {
         api_key: apiKey,
         api_secret: apiSecret
       }
-      dataLayer.updateObject({'consumerId.userId': req.user._id}, consumer)
+      console.log(consumer.credentials)
+      dataLayer.updateObject({_id: req.body._id}, {credentials: consumer.credentials}, {new: true})
         .then(updated => {
           return res.status(200).json({
             status: 'success',

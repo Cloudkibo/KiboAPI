@@ -13,7 +13,32 @@ script.
       }
     })
   })
-
+  function refreshCredentials(consumer) {
+    let payload = {
+      _id: consumer._id
+    }
+    console.log('payload', payload)
+    $.ajax({
+      url : '/api/consumers/resetAPI',
+      type : 'POST',
+      data : payload,
+      dataType:'json',
+      success : function(data) {
+        var payload = data.payload
+        console.log('Data: '+JSON.stringify(data));
+        $("#key").val(payload.credentials.api_key)
+        $("#secret").val(payload.credentials.api_secret)
+      },
+      error : function(request,error)
+      {
+        console.log(request)
+        console.log(error)
+        console.log("Request: " + JSON.stringify(request));
+        return document.getElementById(
+            "alertMsg").innerHTML = request.responseJSON.payload
+      }
+    })
+  }
   function changeProductStatus(consumer) {
     let payload = {
       _id: consumer._id,
