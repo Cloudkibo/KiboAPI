@@ -40,7 +40,7 @@ module.exports = function (app) {
       } else {
         res.render('pages/index', { environment: env, user: req.user })
       }
-    }), 1500)
+    }), 2500)
   })
 
   app.get('/logout', (req, res) => {
