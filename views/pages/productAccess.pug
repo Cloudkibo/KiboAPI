@@ -7,18 +7,20 @@ html(lang='en')
       div(class='m-grid__item m-grid__item--fluid m-wrapper')
         div(class='m-content')
           div(class='row')
-            div(class='col-md-2')
-            div(class='col-md-4')
+            div(class='col-md-1')
+            div(class='col-md-5')
               div(style='display:flex')
                 span(class="col-form-label" style='font-weight: 500;font-size: larger;width: 120px') API Key:
-                input(class="form-control" value=consumer.credentials.api_key)
-            div(class='col-md-4')
+                input(class="form-control" value=consumer.credentials.api_key id='key')
+            div(class='col-md-5')
               div(style='display:flex')
                 span(class="col-form-label" style='font-weight: 500;font-size: larger;width:120px') API Secret:
                 div(class='input-group')
                   input(class="form-control m-input" type='password' value=consumer.credentials.api_secret id='secret')
                   span(class="input-group-addon span-style" id="showButton" style='background-color:#c3c8d8;cursor:pointer') Show
-            div(class='col-md-2')
+            div(class-'col-md-1')
+              span(class="input-group-addon span-style" title='Reset Credentials' id='refreshButton' onclick=`refreshCredentials(${JSON.stringify(consumer)})` style='background-color:#c3c8d8;cursor:pointer')
+                i(class="flaticon-refresh")
           br
           br
           div(class='row')
@@ -68,5 +70,5 @@ html(lang='en')
                 div(class="m-alert__icon")
                   i(class="flaticon-exclamation m--font-brand")
                 div(class="m-alert__text" style='font-size: initial') To view our API documentation, please click
-                  a(href='#')     here
+                  a(href='http://kibopush.com/kiboapi/' target='_blank') here
             div(class='col-md-2')

@@ -1,9 +1,5 @@
 const requestPromise = require('request-promise')
 const config = require('../../../config/environment/index')
-// const logger = require('../../../components/logger')
-// const TAG = 'api/v1/utility/index.js'
-// const util = require('util')
-
 exports.callApi = (endpoint, method = 'get', body, consumerId, type = 'accounts') => {
   let headers
   if (consumerId && consumerId !== '') {
@@ -36,4 +32,30 @@ exports.callApi = (endpoint, method = 'get', body, consumerId, type = 'accounts'
       }
     })
   })
+}
+
+exports.getLoggedInUser = (req, res, env, redirectionLogic) => {
+  let headers
+  headers = {
+    'content-type': 'application/json',
+    'Authorization': `Bearer ${req.cookies.token}`
+  }
+  let body = {}
+  let apiUrl = config.api_urls['accounts'].slice(0, config.api_urls['accounts'].length - 7)
+  let options = {
+    method: 'GET',
+    uri: `${apiUrl}/auth/verify`,
+    headers,
+    body,
+    json: true
+  }
+  requestPromise(options)
+    .then(result => {
+      if (result.status === 'success') {
+        redirectionLogic(req, res, env, result.user)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
 }
