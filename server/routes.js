@@ -30,8 +30,7 @@ module.exports = function (app) {
   app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
-    console.log('Rendering Head')
-    // rendering head to call authentication logic and get access token
+    res.render('partials/head', { environment: env, user: req.user })
     res.render('partials/head', { environment: env, user: req.user }, setTimeout(function () {
       console.log('Token found', req.cookies.token)
       // when the token is available get userId to see if the developer account is already made
@@ -40,7 +39,7 @@ module.exports = function (app) {
       } else {
         res.render('pages/index', { environment: env, user: req.user })
       }
-    }), 2500)
+    }), 5000)
   })
 
   app.get('/logout', (req, res) => {
