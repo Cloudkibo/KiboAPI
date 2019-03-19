@@ -28,12 +28,15 @@ module.exports = function (app) {
   app.use('/api/consumers', require('./api/v1/consumers'))
 
   // first page
-  app.get('/', auth.isAuthenticated(), (req, res) => {
+  app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
-    setTimeout(function () {
-      redirectionLogic(req, res, env)
-    }, 3000)
+    console.log('Token', req.cookies.token)
+    if (req.cookies.token) {
+      utility.getLoggedInUser(req, res, env, redirectionLogic)
+    } else {
+      res.render('pages/index', { environment: env, user: req.user })
+    }
   })
 
   app.get('/logout', (req, res) => {
@@ -72,20 +75,20 @@ function redirectToLogoutAccounts (req, res) {
   }
 }
 function redirectionLogic (req, res, env, user) {
-  console.log('In redirection logic', req.user)
-  if (req.user) {
-    dataLayer.findOne({'consumerId.userId': req.user._id})
+  console.log('In redirection logic', user)
+  if (user) {
+    dataLayer.findOne({'consumerId.userId': user._id})
       .then(consumer => {
         if (consumer) {
-          res.render('pages/productAccess', {consumer: consumer, user: req.user})
+          res.render('pages/productAccess', {consumer: consumer, user: user})
         } else {
-          res.render('pages/index', { environment: env, user: req.user })
+          res.render('pages/index', { environment: env, user: user })
         }
       })
       .catch(err => {
         console.log('Error in rediretion logic', err)
       })
   } else {
-    res.render('pages/index', { environment: env, user: req.user })
+    res.render('pages/index', { environment: env, user: user })
   }
 }
