@@ -32,7 +32,7 @@ module.exports = function (app) {
       {expires: new Date(Date.now() + 900000)})
     console.log('Rendering Head')
     // rendering head to call authentication logic and get access token
-    res.render('partials/head', { environment: env, user: req.user }, function () {
+    res.render('partials/head', { environment: env, user: req.user }, setTimeout(function () {
       console.log('Token found', req.cookies.token)
       // when the token is available get userId to see if the developer account is already made
       if (req.cookies.token) {
@@ -40,7 +40,7 @@ module.exports = function (app) {
       } else {
         res.render('pages/index', { environment: env, user: req.user })
       }
-    })
+    }), 1500)
   })
 
   app.get('/logout', (req, res) => {
