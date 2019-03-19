@@ -57,7 +57,7 @@ module.exports = function (app) {
 function redirectToLogoutAccounts (req, res) {
   console.log(req.get('host'))
   let redirectUrls = {
-    'kiboapi': 'https://accounts.cloudkibo.com/auth/logout?continue=http:/kiboapi.cloudkibo.com',
+    'kiboapi': 'https://accounts.cloudkibo.com/auth/logout?continue=https://kiboapi.cloudkibo.com',
     'localhost:3023': 'http://localhost:3024/auth/logout?continue=http://localhost:3023'
   }
   let products = Object.keys(redirectUrls)
