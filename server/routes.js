@@ -30,8 +30,10 @@ module.exports = function (app) {
   app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
+    console.log('Rendering Head')
     // rendering head to call authentication logic and get access token
     res.render('partials/head', { environment: env, user: req.user }, function () {
+      console.log('Token found', req.cookies.token)
       // when the token is available get userId to see if the developer account is already made
       if (req.cookies.token) {
         utility.getLoggedInUser(req, res, env, redirectionLogic)
@@ -77,6 +79,7 @@ function redirectToLogoutAccounts (req, res) {
   }
 }
 function redirectionLogic (req, res, env, user) {
+  console.log('In redirection logic')
   dataLayer.findOne({'consumerId.userId': user._id})
     .then(consumer => {
       if (consumer) {
