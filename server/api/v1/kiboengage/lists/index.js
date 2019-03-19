@@ -11,34 +11,34 @@ router.get('/allLists',
   controller.allLists)
 
 router.post('/getAll',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   validate({body: validationSchema.getAllPayload}),
   controller.getAll)
 
 router.post('/createList',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   validate({body: validationSchema.createPayload}),
   controller.createList)
 
 router.post('/editList',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   validate({body: validationSchema.editPayload}),
   controller.editList)
 
 router.get('/viewList/:id',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.viewList)
 
 router.delete('/deleteList/:id',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.deleteList)
 
 router.get('/repliedPollSubscribers',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.repliedPollSubscribers)
 
 router.get('/repliedSurveySubscribers',
-  // auth.isAuthenticated(),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.repliedSurveySubscribers)
 
 module.exports = router

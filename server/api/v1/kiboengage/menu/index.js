@@ -4,27 +4,18 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('./menu.controller')
-// const auth = require('../../../auth/auth.service')
-
-// const validate = require('express-jsonschema').validate
-// const validationSchema = require('./validationSchema')
+const auth = require('../../../../auth/auth.service')
 
 router.get('/',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('menu'),
-  // auth.doesRolePermitsThisAction('menuPermission'),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.index)
 
 router.post('/indexByPage',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('menu'),
-  // auth.doesRolePermitsThisAction('menuPermission'),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.indexByPage)
 
 router.post('/create',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('menu'),
-  // auth.doesRolePermitsThisAction('menuPermission'),
+  auth.isAuthenticatedExternal('kiboengage'),
   controller.create)
 
 module.exports = router

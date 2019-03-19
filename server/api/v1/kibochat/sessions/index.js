@@ -7,69 +7,49 @@ const validationSchema = require('./validationSchema')
 const controller = require('./sessions.controller')
 
 router.get('/',
-  auth.isAuthenticatedExternal(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.index)
 
 router.post('/getOpenSessions',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.openSessionsPayload}),
   controller.getNewSessions)
 
 router.post('/getClosedSessions',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.openSessionsPayload}),
   controller.getResolvedSessions)
 
 router.get('/markread/:id',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.markread)
 
 router.get('/:id',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.show)
 
 router.post('/changeStatus',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.changeStatusPayload}),
   controller.changeStatus)
 
 router.post('/assignAgent',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.assignAgentPayload}),
   controller.assignAgent)
 
 router.post('/assignTeam',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.assignTeamPayload}),
   controller.assignTeam)
 
-router.post('/unSubscribe',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+/* router.post('/unSubscribe',
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.unSubscribePayload}),
-  controller.unSubscribe)
+  controller.unSubscribe) */
 
 router.post('/query',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.genericFind)
 
 module.exports = router

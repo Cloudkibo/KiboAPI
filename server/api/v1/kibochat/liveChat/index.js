@@ -3,43 +3,31 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('./liveChat.controller')
-// const auth = require('../../../auth/auth.service')
+const auth = require('../../../../auth/auth.service')
 const validate = require('express-jsonschema').validate
 const validationSchema = require('./validationSchema')
 
 router.post('/',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.createPayload}),
   controller.create)
 
 router.post('/updateUrl',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
-  validate({body: validationSchema.updatePayload}),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.update)
 
 router.post('/getUrlMeta',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.urlMetaPayload}),
   controller.geturlmeta)
 
 router.post('/search',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
+  auth.isAuthenticatedExternal('kibochat'),
   validate({body: validationSchema.searchPayload}),
   controller.search)
 
 router.post('/:session_id',
-  // auth.isAuthenticated(),
-  // auth.doesPlanPermitsThisAction('livechat'),
-  // auth.doesRolePermitsThisAction('livechatPermission'),
-  // validate({body: validationSchema.indexPayload}),
+  auth.isAuthenticatedExternal('kibochat'),
   controller.index)
 
 module.exports = router
