@@ -35,7 +35,7 @@ module.exports = function (app) {
     if (req.cookies.token) {
       utility.getLoggedInUser(req, res, env, redirectionLogic)
     } else {
-      res.render('pages/index', { environment: env, user: req.user })
+      res.render('pages/index', { environment: env, user: req.user, loading: true })
     }
   })
 
@@ -82,13 +82,13 @@ function redirectionLogic (req, res, env, user) {
         if (consumer) {
           res.render('pages/productAccess', {consumer: consumer, user: user})
         } else {
-          res.render('pages/index', { environment: env, user: user })
+          res.render('pages/index', { environment: env, user: user, loading: false })
         }
       })
       .catch(err => {
         console.log('Error in rediretion logic', err)
       })
   } else {
-    res.render('pages/index', { environment: env, user: user })
+    res.render('pages/index', { environment: env, user: user, loading: false })
   }
 }
