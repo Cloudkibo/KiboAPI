@@ -57,6 +57,7 @@ exports.upload = function (req, res) {
 exports.sendConversation = function (req, res) {
   utility.callApi(`broadcasts/sendConversation`, 'post', req.body, req.headers.consumer_id, 'kiboengage')
     .then(response => {
+      console.log('response', response)
       return res.status(200).json({ status: 'success', payload: response })
     })
     .catch(err => {
