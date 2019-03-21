@@ -7,10 +7,9 @@ html(lang='en')
         if loading
           div(class='m-content')
             center
-              div(class='loader-mask')
-                div(class='loader')
-                  span
-                    | Loading....
+              div(class='m-loader m-loader--primary' style='height: 100px')
+                span(style='color: #07d; font-size: large')
+                  | Loading....
         else
           div(class='m-content')
             center
