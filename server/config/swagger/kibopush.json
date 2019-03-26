@@ -5359,6 +5359,57 @@
         }
       }
     },
+    "/users/updatePlatform": {
+      "post": {
+        "description": "updates the platform field in the user table",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "formData",
+            "description": "the value of the platform",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response404"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
     "/users/fbAppId": {
       "get": {
         "description": "Get the user's facebook client id",
@@ -8320,6 +8371,69 @@
         }
       }
     },
+    "/company/updatePlatform": {
+      "post": {
+        "description": "adds twilio account information",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountSID",
+            "in": "formData",
+            "description": "the account SID of the twilio account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authToken",
+            "in": "formData",
+            "description": "The auth Token of the twilio account",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "savedCompanyProfile": {
+                      "type": "object",
+                      "$ref": "#/definitions/Company"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response404"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
     "/company/members": {
       "get": {
         "description": "Gives all members of a company",
@@ -9741,6 +9855,478 @@
           }
         }
       }
+    },
+    "/contacts": {
+      "post": {
+        "description": "gives all the contacts of the logged in company",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "first_page",
+            "in": "formData",
+            "required": true,
+            "description": "the requested page",
+            "type": "string"
+          },
+          {
+            "name": "current_page",
+            "in": "formData",
+            "required": false,
+            "description": "the crrent page number",
+            "type": "number"
+          },
+          {
+            "name": "number_of_records",
+            "in": "formData",
+            "required": true,
+            "description": "the number of records to show on a page",
+            "type": "number"
+          },
+          {
+            "name": "requested_page",
+            "in": "formData",
+            "required": true,
+            "description": "the requested page number",
+            "type": "number"
+          },
+          {
+            "name": "last_id",
+            "in": "formData",
+            "required": true,
+            "description": "the id of the last record of the previous page",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Contact"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/contacts/uploadNumbers": {
+      "post": {
+        "description": "gives all the contacts of the logged in company",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "numbers",
+            "in": "formData",
+            "required": true,
+            "description": "the contacts to create",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "$ref": "#/definitions/Contact"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/smsBroadcasts": {
+      "post": {
+        "description": "gives all the sms broadcats of the logged in company",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "first_page",
+            "in": "formData",
+            "required": true,
+            "description": "the requested page",
+            "type": "string"
+          },
+          {
+            "name": "current_page",
+            "in": "formData",
+            "required": false,
+            "description": "the crrent page number",
+            "type": "number"
+          },
+          {
+            "name": "number_of_records",
+            "in": "formData",
+            "required": true,
+            "description": "the number of records to show on a page",
+            "type": "number"
+          },
+          {
+            "name": "requested_page",
+            "in": "formData",
+            "required": true,
+            "description": "the requested page number",
+            "type": "number"
+          },
+          {
+            "name": "last_id",
+            "in": "formData",
+            "required": true,
+            "description": "the id of the last record of the previous page",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/SmsBroadcast"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/smsBroadcasts/sendBroadcast": {
+      "post": {
+        "description": "saves and sends a broadcast",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "broadcast",
+            "in": "body",
+            "required": true,
+            "description": "broadcast details",
+            "schema": {
+              "$ref": "#/definitions/SmsBroadcast"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "$ref": "#/definitions/SmsBroadcast"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/smsChat": {
+      "post": {
+        "description": "saves a chat message in the database",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "smsChat",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contactId": {
+                  "type": "string"
+                },
+                "sendernumber": {
+                  "type": "string"
+                },
+                "recipientNumber": {
+                  "type": "string"
+                },
+                "payload": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "$ref": "#/definitions/SmsChat"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/smsChat/getSessions": {
+      "post": {
+        "description": "fetces all sessions of logged in company",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "first_page",
+            "in": "formData",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "name": "last_id",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "number_of_records",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "sessions": {
+                      "$ref": "#/definitions/Contact"
+                    },
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/smsChat/getChat/:contactId": {
+      "post": {
+        "description": "Fetches the chat of a particular session",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "last_id",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "number",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "chat": {
+                      "$ref": "#/definitions/SmsChat"
+                    },
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response403"
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -9851,6 +10437,10 @@
         "subscribeToMessengerTourSeen": {
           "type": "boolean",
           "description": "Whether the user has visited the subscribe to messenger page or not"
+        },
+        "platform": {
+          "type": "string",
+          "description": "Whether to show messenger options or twilio options"
         }
       }
     },
@@ -11501,6 +12091,9 @@
         },
         "automated_options": {
           "type": "string"
+        },
+        "twilio": {
+          "type": "object"
         }
       }
     },
@@ -12424,6 +13017,151 @@
         "billingPermission": {
           "type": "boolean",
           "description": "permission to view the billing plans"
+        }
+      }
+    },
+    "SmsBroadcast": {
+      "type": "object",
+      "description": "This table is used to store twilio broadcasts",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "uique id of the record",
+          "readOnly": true
+        },
+        "platform": {
+          "type": "string",
+          "description": "Value of the platform",
+          "default": "Twilio"
+        },
+        "payload": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "content of the broadcast"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the broadcast"
+        },
+        "segmentation": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "segmentation of the broadcast"
+        },
+        "userId": {
+          "type": "string",
+          "description": "userId of the one who created this broadcast",
+          "readOnly": true
+        },
+        "companyId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "datetime": {
+          "type": "string",
+          "description": "date and time at which the broadcast is created",
+          "readOnly": true
+        },
+        "sent": {
+          "type": "number",
+          "description": "number of people this broadcast is sent to",
+          "readOnly": true
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "phone number from which this broadcast is sent"
+        }
+      }
+    },
+    "SmsChat": {
+      "type": "object",
+      "description": "This table is used to store twilio broadcasts",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "uique id of the record",
+          "readOnly": true
+        },
+        "format": {
+          "type": "string",
+          "description": "twilio or kibopush",
+          "default": "kibopush"
+        },
+        "senderNumber": {
+          "type": "string",
+          "description": "number of the sender"
+        },
+        "recipientNumber": {
+          "type": "string",
+          "description": "Number of the recepient"
+        },
+        "contactId": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "string",
+          "description": "id of the company"
+        },
+        "payload": {
+          "type": "string",
+          "description": "content of the chat"
+        },
+        "datetime": {
+          "type": "string",
+          "description": "date and time at which the chat is created"
+        },
+        "status": {
+          "type": "string",
+          "description": "whether is chat is seen or unseen"
+        },
+        "repliedBy": {
+          "type": "string"
+        }
+      }
+    },
+    "Contact": {
+      "type": "object",
+      "description": "This table is used to store twilio broadcasts",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "uique id of the record",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "description": "name of the contact"
+        },
+        "companyId": {
+          "type": "string",
+          "description": "id of the company"
+        },
+        "number": {
+          "type": "string",
+          "description": "number of the contact"
+        },
+        "datetime": {
+          "type": "string",
+          "description": "date and time at which the contact is created"
+        },
+        "otherColumns": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "other columns except for name and number"
+        },
+        "last_activity_time": {
+          "type": "string",
+          "description": "the date and time of the last activity of this contact"
+        },
+        "hasChat": {
+          "type": "boolean",
+          "description": "whether this contact has chat messages or not"
         }
       }
     },
