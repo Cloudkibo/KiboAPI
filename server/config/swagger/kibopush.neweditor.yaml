@@ -37,7 +37,7 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
-host: app.kibopush.com
+host: kiboapi.cloudkibo.com
 basePath: /api
 schemes:
   - https
