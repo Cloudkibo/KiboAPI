@@ -5724,6 +5724,58 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response404'
+  /company/updatePlatformWhatsApp:
+    post:
+      description: adds twilio account information
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: accountSID
+          in: formData
+          description: the account SID of the twilio account
+          required: true
+          type: string
+        - name: authToken
+          in: formData
+          description: The auth Token of the twilio account
+          required: true
+          type: string
+        - name: sanboxNumber
+          in: formData
+          description: whatsApp sandbox number
+          required: true
+          type: string
+        - name: sandboxCode
+          in: formData
+          description: whatsApp sandbox code
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  savedCompanyProfile:
+                    type: object
+                    $ref: '#/definitions/Company'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+        '404':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response404'
 
   /company/members:
     get:
@@ -6994,6 +7046,283 @@ paths:
           description: failed
           schema:
              $ref: '#/definitions/Response500'
+  /whatsAppContacts:
+    post:
+      description: gives all the contacts of the logged in company
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: first_page
+          in: formData
+          required: true
+          description: the requested page
+          type: string
+        - name: current_page
+          in: formData
+          required: false
+          description: the crrent page number
+          type: number
+        - name: number_of_records
+          in: formData
+          required: true
+          description: the number of records to show on a page
+          type: number
+        - name: requested_page
+          in: formData
+          required: true
+          description: the requested page number
+          type: number
+        - name: last_id
+          in: formData
+          required: true
+          description: the id of the last record of the previous page
+          type: number
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: array
+                items:
+                  $ref: '#/definitions/WhatsAppContact'
+        '403':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response403'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /whatsAppBroadcasts:
+    post:
+      description: gives all the whatsapp broadcats of the logged in company
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: first_page
+          in: formData
+          required: true
+          description: the requested page
+          type: string
+        - name: current_page
+          in: formData
+          required: false
+          description: the crrent page number
+          type: number
+        - name: number_of_records
+          in: formData
+          required: true
+          description: the number of records to show on a page
+          type: number
+        - name: requested_page
+          in: formData
+          required: true
+          description: the requested page number
+          type: number
+        - name: last_id
+          in: formData
+          required: true
+          description: the id of the last record of the previous page
+          type: number
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: array
+                items:
+                  $ref: '#/definitions/WhatsAppBroadcast'
+        '403':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response403'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /whatsAppBroadcasts/sendBroadcast:
+    post:
+      description: saves and sends a broadcast
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: broadcast
+          in: body
+          required: true
+          description: broadcast details
+          schema:
+            $ref: '#/definitions/WhatsAppBroadcast'
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                $ref: '#/definitions/WhatsAppBroadcast'
+        '403':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response403'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /whatsAppChat:
+    post:
+      description: saves a chat message in the database
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: whatsAppChat
+          in: body
+          schema:
+            type: object
+            properties:
+              contactId:
+                type: string
+              sendernumber:
+                type: string
+              recipientNumber:
+                type: string
+              payload:
+                type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                $ref: '#/definitions/WhatsAppChat'
+        '403':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response403'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /whatsAppChat/getSessions:
+    post:
+      description: fetces all sessions of logged in company
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: first_page
+          in: formData
+          type: boolean
+          required: true
+        - name: last_id
+          in: formData
+          type: string
+          required: true
+        - name: number_of_records
+          in: formData
+          type: number
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  sessions:
+                    $ref: '#/definitions/WhatsAppContact'
+                  count:
+                    type: number
+        '403':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response403'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+  /whatsAppChat/getChat/:contactId:
+    post:
+      description: Fetches the chat of a particular session
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: formData
+          type: string
+          required: true
+        - name: last_id
+          in: formData
+          type: string
+          required: true
+        - name: number
+          in: formData
+          type: number
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  chat:
+                    $ref: '#/definitions/WhatsAppChat'
+                  count:
+                    type: number
+        '403':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response403'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
 ################################################################################
 #                                 Definitions                                  #
 ################################################################################
@@ -7082,7 +7411,7 @@ definitions:
         description: Whether the user has visited the subscribe to messenger page or not
       platform:
         type: string
-        description: Whether to show messenger options or twilio options
+        description: messenger, whatsapp or sms
   Broadcast:
     required:
       - payload
@@ -8312,7 +8641,22 @@ definitions:
         type: string
       twilio:
         type: object
-
+        properties:
+          accountSID:
+            type: string
+          authToken:
+            type: string
+      twilioWhatsApp:
+        type: object
+        properties:
+          accountSID:
+            type: string
+          authToken:
+            type: string
+          sandboxNumber:
+            type: string
+          sandboxCode:
+            type: string
   CompanyUser:
     type: object
     description: This table is used to store company's information
@@ -9004,7 +9348,7 @@ definitions:
 
   SmsBroadcast:
     type: object
-    description: This table is used to store twilio broadcasts
+    description: This table is used to store sms broadcasts
     properties:
       _id:
         type: string
@@ -9047,7 +9391,7 @@ definitions:
         description: phone number from which this broadcast is sent
   SmsChat:
     type: object
-    description: This table is used to store twilio broadcasts
+    description: This table is used to store sms chat
     properties:
       _id:
         type: string
@@ -9069,7 +9413,7 @@ definitions:
         type: string
         description: id of the company
       payload:
-        type: string
+        type: object
         description: content of the chat
       datetime:
         type: string
@@ -9081,7 +9425,120 @@ definitions:
         type: string
   Contact:
     type: object
-    description: This table is used to store twilio broadcasts
+    description: This table is used to store sms contacts
+    properties:
+      _id:
+        type: string
+        description: uique id of the record
+        readOnly: true
+      name:
+        type: string
+        description: name of the contact
+      companyId:
+        type: string
+        description: id of the company
+      number:
+        type: string
+        description: number of the contact
+      datetime:
+        type: string
+        description: date and time at which the contact is created
+      otherColumns:
+        type: array
+        items:
+          type: object
+        description: other columns except for name and number
+      last_activity_time:
+        type: string
+        description: the date and time of the last activity of this contact
+      hasChat:
+        type: boolean
+        description: whether this contact has chat messages or not
+
+  WhatsAppBroadcast:
+    type: object
+    description: This table is used to store whatsapp broadcasts
+    properties:
+      _id:
+        type: string
+        description: uique id of the record
+        readOnly: true
+      platform:
+        type: string
+        description: Value of the platform
+        default: 'WhatsApp Twilio'
+      payload:
+        type: array
+        items:
+          type: object
+        description: content of the broadcast
+      title:
+        type: string
+        description: Title of the broadcast
+      segmentation:
+        type: array
+        items:
+          type: object
+        description: segmentation of the broadcast
+      userId:
+        type: string
+        description: userId of the one who created this broadcast
+        readOnly: true
+      companyId:
+        type: string
+        readOnly: true
+      datetime:
+        type: string
+        description: date and time at which the broadcast is created
+        readOnly: true
+      sent:
+        type: number
+        description: number of people this broadcast is sent to
+        readOnly: true
+      seen:
+        type: number
+        description: number of people that has seen this broadcast
+        readOnly: true
+      phoneNumber:
+        type: string
+        description: phone number from which this broadcast is sent
+  WhatsAppChat:
+    type: object
+    description: This table is used to store whatsapp chat
+    properties:
+      _id:
+        type: string
+        description: uique id of the record
+        readOnly: true
+      format:
+        type: string
+        description: twilio or kibopush
+        default: 'kibopush'
+      senderNumber:
+        type: string
+        description: number of the sender
+      recipientNumber:
+        type: string
+        description: Number of the recepient
+      contactId:
+        type: string
+      companyId:
+        type: string
+        description: id of the company
+      payload:
+        type: object
+        description: content of the chat
+      datetime:
+        type: string
+        description: date and time at which the chat is created
+      status:
+        type: string
+        description: whether is chat is seen or unseen
+      repliedBy:
+        type: string
+  WhatsAppContact:
+    type: object
+    description: This table is used to store whatsapp contacts
     properties:
       _id:
         type: string
