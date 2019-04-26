@@ -4,11 +4,18 @@ html(lang='en')
   include ../partials/head.pug
     div(class='m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body')
       div(class='m-grid__item m-grid__item--fluid m-wrapper')
-        div(class='m-content')
-          center
-            div(class='col-md-6 m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
-              div(class='m-portlet__body')
-                span Become a KiboPush developer? Click on the button below:
-                br
-                br
-                a(class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill" href='/product') Create Developer Account
+        if loading
+          div(class='m-content')
+            center
+              div(class='m-loader m-loader--primary' style='height: 100px')
+                span(style='color: #07d; font-size: large')
+                  | Loading....
+        else
+          div(class='m-content')
+            center
+              div(class='col-md-6 m-portlet m-portlet--border-bottom-brand' style='border: 1px solid rgb(204, 204, 204);box-shadow: rgb(204, 204, 204) 2px 5px')
+                div(class='m-portlet__body')
+                  span Become a KiboPush developer? Click on the button below:
+                  br
+                  br
+                  a(class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill" href='/product') Create Developer Account

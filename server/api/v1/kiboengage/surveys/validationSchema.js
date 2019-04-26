@@ -71,7 +71,7 @@ exports.createPayload = {
         }
       ]
     },
-    'segmentationPoll': {
+    'segmentationSurvey': {
       'type': 'array',
       'items': [
         {

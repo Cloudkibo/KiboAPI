@@ -1,6 +1,7 @@
 const config = require('./config/environment/index')
-const auth = require('./auth/auth.service')
 const dataLayer = require('./api/v1/consumers/consumers.datalayer')
+const utility = require('./api/v1/utility/index')
+const auth = require('./auth/auth.service')
 module.exports = function (app) {
   const env = app.get('env')
   // Exposed API middlewares go here
@@ -30,7 +31,12 @@ module.exports = function (app) {
   app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
-    res.render('pages/index', { environment: env, user: req.user })
+    console.log('Token', req.cookies.token)
+    if (req.cookies.token) {
+      utility.getLoggedInUser(req, res, env, redirectionLogic)
+    } else {
+      res.render('pages/index', { environment: env, user: req.user, loading: true })
+    }
   })
 
   app.get('/logout', (req, res) => {
@@ -57,7 +63,7 @@ module.exports = function (app) {
 function redirectToLogoutAccounts (req, res) {
   console.log(req.get('host'))
   let redirectUrls = {
-    'kiboapi': 'https://accounts.cloudkibo.com/auth/logout?continue=http:/kiboapi.cloudkibo.com',
+    'kiboapi': 'https://accounts.cloudkibo.com/auth/logout?continue=https://kiboapi.cloudkibo.com',
     'localhost:3023': 'http://localhost:3024/auth/logout?continue=http://localhost:3023'
   }
   let products = Object.keys(redirectUrls)
@@ -66,5 +72,23 @@ function redirectToLogoutAccounts (req, res) {
       res.redirect(redirectUrls[products[i]])
       break
     }
+  }
+}
+function redirectionLogic (req, res, env, user) {
+  console.log('In redirection logic', user)
+  if (user) {
+    dataLayer.findOne({'consumerId.userId': user._id})
+      .then(consumer => {
+        if (consumer) {
+          res.render('pages/productAccess', {consumer: consumer, user: user})
+        } else {
+          res.render('pages/index', { environment: env, user: user, loading: false })
+        }
+      })
+      .catch(err => {
+        console.log('Error in rediretion logic', err)
+      })
+  } else {
+    res.render('pages/index', { environment: env, user: user, loading: false })
   }
 }

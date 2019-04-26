@@ -8,11 +8,19 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     script(type='text/javascript').
-      window.__url_production = "http://kiboapi.cloudkibo.com";
+      window.__url_production = "https://kiboapi.cloudkibo.com";
       window.__url_development = "http://localhost:3023";
     script(src="https://cdn.cloudkibo.com/public/scripts/kiboAuthScript.js")
     // begin::Web font
     // Facebook Pixel Code
+    script.
+      var token = readCookie("token");
+      console.log('token in client', token)
+      if (!token) {
+        setTimeout(function () {
+          location.reload(true)
+        },1000)
+      }
     script.
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
