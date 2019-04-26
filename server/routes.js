@@ -31,7 +31,10 @@ module.exports = function (app) {
   app.get('/', (req, res) => {
     res.cookie('environment', config.env,
       {expires: new Date(Date.now() + 900000)})
-    console.log('Token', req.cookies.token)
+    res.cookie('url_production', 'https://kiboapi.cloudkibo.com',
+      {expires: new Date(Date.now() + 900000)})
+    res.cookie('url_development', 'http://localhost:3023',
+      {expires: new Date(Date.now() + 900000)})
     if (req.cookies.token) {
       utility.getLoggedInUser(req, res, env, redirectionLogic)
     } else {
