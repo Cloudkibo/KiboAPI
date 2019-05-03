@@ -24,6 +24,10 @@ module.exports = function (app) {
   app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
   app.use('/product', require('./api/v1/product/'))
 
+  //  exposed APIs
+  app.use('/api/pages', require('./api/v1/exposedAPIs/pages'))
+  app.use('/api/broadcasts', require('./api/v1/exposedAPIs/broadcasts'))
+
   // internal API
   app.use('/api/consumers', require('./api/v1/consumers'))
 
