@@ -22,7 +22,6 @@ module.exports = function (app) {
   app.use('/api/surveys', require('./api/v1/kiboengage/surveys'))
   app.use('/api/templates', require('./api/v1/kiboengage/templates'))
   app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
-  app.use('/api/webhooks', require('./api/v1/kiboengage/webhooks'))
   app.use('/product', require('./api/v1/product/'))
 
   //  exposed APIs
