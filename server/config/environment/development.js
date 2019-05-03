@@ -25,6 +25,8 @@ module.exports = {
     chat: 'http://localhost:3022/api',
     kibochat: `http://localhost:3022/api`,
     kiboengage: `http://localhost:3021/api`,
-    kibodash: `http://localhost:5050/api/v1`
+    kibodash: `http://localhost:5050/api/v1`,
+    kiboEngageDBLayer: `http://localhost:3031/api/v1`,
+    kiboChatDBLayer: `http://localhost:3030/api/v1`
   }
 }
