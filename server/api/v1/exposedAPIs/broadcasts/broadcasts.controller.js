@@ -164,7 +164,7 @@ function uploadFileOnServer (payload, page) {
   //   `dir ${JSON.stringify(dir)}`)
   // logger.serverLog(TAG,
   //   `serverPath ${JSON.stringify(serverPath)}`)
-  let readData = fs.createReadStream(dir + '/userfiles/')
+  // let readData = fs.createReadStream(dir + '/userfiles/')
   let writeData = fs.createWriteStream(dir + '/userfiles/' + payload.fileurl)
   readData.pipe(writeData)
   return `${dir}/userfiles/${payload.fileurl}`
