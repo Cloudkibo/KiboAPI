@@ -89,10 +89,13 @@ const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLe
 function updatePayload (body, page) {
   return new Promise((resolve, reject) => {
     console.log('in updatePayload', body.payload)
+    let url = ''
     let payload = body.payload
     for (let i = 0; i < payload.length; i++) {
       if (payload[i].componentType.toLowerCase() !== 'text') {
-        payload[i] = uploadFileOnFaceBook(payload[i], page)
+        url = uploadFileOnServer(payload[i], page)
+        console.log('url', url)
+        payload[i] = uploadFileOnFaceBook(payload[i], page, url)
       }
       if (i === payload.length - 1) {
         console.log('resolve payload', payload)
@@ -139,4 +142,30 @@ function uploadFileOnFaceBook (payload, page) {
           }
         })
     })
+}
+function uploadFileOnServer (payload, page) {
+  // var today = new Date()
+  // var uid = crypto.randomBytes(5).toString('hex')
+  // var serverPath = 'f' + uid + '' + today.getFullYear() + '' +
+  //   (today.getMonth() + 1) + '' + today.getDate()
+  // serverPath += '' + today.getHours() + '' + today.getMinutes() + '' +
+  //   today.getSeconds()
+  // let fext = req.files.file.name.split('.')
+  // serverPath += '.' + fext[fext.length - 1].toLowerCase()
+  //
+  let dir = path.resolve(__dirname, '../../../../../broadcastFiles/')
+  console.log('dir', dir)
+  //
+  // logger.serverLog(TAG,
+  //   `req.files.file ${JSON.stringify(req.files.file.path)}`)
+  // logger.serverLog(TAG,
+  //   `req.files.file ${JSON.stringify(req.files.file.name)}`)
+  // logger.serverLog(TAG,
+  //   `dir ${JSON.stringify(dir)}`)
+  // logger.serverLog(TAG,
+  //   `serverPath ${JSON.stringify(serverPath)}`)
+  let readData = fs.createReadStream(dir + '/userfiles/' + payload.fileurl)
+  let writeData = fs.createWriteStream(dir + '/userfiles/' + payload.fileurl)
+  readData.pipe(writeData)
+  return `${dir}/userfiles/${payload.fileurl}`
 }
