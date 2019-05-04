@@ -39,9 +39,9 @@ script.
       }
     })
   }
-  function changeProductStatus(event, consumer) {
-    console.log('consumer', consumer)
-    console.log('event', event)
+  function changeProductStatus(e, consumer) {
+      console.log('event', e)
+        console.log('consumer', consumer)
     let payload = {
       _id: consumer._id,
       scope: {}
