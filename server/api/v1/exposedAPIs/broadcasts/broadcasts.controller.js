@@ -165,7 +165,12 @@ function uploadFileOnServer (payload, page) {
   // logger.serverLog(TAG,
   //   `serverPath ${JSON.stringify(serverPath)}`)
   // let readData = fs.createReadStream(dir + '/userfiles/')
-  let writeData = fs.createWriteStream(dir + '/userfiles/' + payload.fileurl)
-  readData.pipe(writeData)
-  return `${dir}/userfiles/${payload.fileurl}`
+  let fileToStore = dir + '/userfiles/' + payload.fileurl
+  var stream = request(payload.fileurl).pipe(fs.createWriteStream(fileToStore))
+  stream.on('finish', function () {
+    console.log('finished')
+    // let writeData = fs.createWriteStream(dir + '/userfiles/' + payload.fileurl)
+    //   readData.pipe(writeData)
+    return `${dir}/userfiles/${payload.fileurl}`
+  })
 }
