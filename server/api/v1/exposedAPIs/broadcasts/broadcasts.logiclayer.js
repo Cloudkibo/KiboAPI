@@ -10,7 +10,7 @@ exports.prepareBroadCastPayload = (req) => {
     segmentationPageIds: [req.body.pageId]
   }
   if (req.body.segmentationGender) {
-    broadcastPayload.segmentationGender = [req.body.segmentationGender]
+    broadcastPayload.segmentationGender = [req.body.segmentationGender.toLowerCase()]
   }
   return broadcastPayload
 }
@@ -19,9 +19,7 @@ exports.subsFindCriteria = function (body, companyId) {
   if (body.segmentationGender && body.segmentationGender.length > 0) {
     subscriberFindCriteria = _.merge(subscriberFindCriteria,
       {
-        gender: {
-          $in: body.segmentationGender
-        }
+        gender: body.segmentationGender.toLowerCase()
       })
   }
   return subscriberFindCriteria

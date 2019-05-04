@@ -3,55 +3,64 @@ const { validateInput, batchApi } = require('./utility')
 const logicLayer = require('./broadcasts.logiclayer')
 const dataLayer = require('./broadcasts.datalayer')
 let request = require('request')
+const needle = require('needle')
+const path = require('path')
+const fs = require('fs')
+let config = require('./../../../../config/environment')
 
 exports.sendBroadcast = function (req, res) {
   if (!validateInput(req.body)) {
     return res.status(400)
       .json({status: 'failed', description: 'Please fill all the required fields'})
   }
-  dataLayer.createForBroadcast(logicLayer.prepareBroadCastPayload(req))
-    .then(broadcast => {
-      let subscriberFindCriteria = logicLayer.subsFindCriteria(req.body, req.consumer.consumerId.companyId)
-      let interval = setInterval(() => {
-        clearInterval(interval)
-        sendToSubscribers(subscriberFindCriteria, req, res, broadcast)
-      }, 3000)
+  utility.callApi(`pages/query`, 'post', {_id: req.body.pageId}, req.headers.consumer_id)
+    .then(page => {
+      page = page[0]
+      updatePayload(req.body, page)
+        .then(result => {
+          console.log('updatedPayload', JSON.stringify(result.payload))
+          dataLayer.createForBroadcast(logicLayer.prepareBroadCastPayload(req))
+            .then(broadcast => {
+              let subscriberFindCriteria = logicLayer.subsFindCriteria(req.body, req.consumer.consumerId.companyId)
+              console.log('subsFindCriteria', subscriberFindCriteria)
+              let interval = setInterval(() => {
+                clearInterval(interval)
+                sendToSubscribers(subscriberFindCriteria, req, res, broadcast, page)
+              }, 3000)
+            })
+            .catch(error => {
+              return res.status(500).json({status: 'failed', payload: `Failed to create broadcast ${JSON.stringify(error)}`})
+            })
+        })
     })
     .catch(error => {
-      return res.status(500).json({status: 'failed', payload: `Failed to create broadcast ${JSON.stringify(error)}`})
+      return res.status(500).json({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
     })
 }
-const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast) => {
+const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page) => {
   utility.callApi(`subscribers/query`, 'post', subscriberFindCriteria, req.headers.consumer_id)
     .then(subscribers => {
       if (subscribers.length < 1) {
         return res.status(500).json({status: 'failed', description: `No subscribers match the selected criteria`})
       }
-      utility.callApi(`pages/query`, 'post', {_id: req.body.pageId}, req.headers.consumer_id)
-        .then(page => {
-          page = page[0]
-          subscribers.forEach((subscriber, index) => {
-            // update broadcast sent field
-            dataLayer.createForBroadcastPage({
-              pageId: page.pageId,
-              userId: req.consumer.consumerId.userId,
-              subscriberId: subscriber.senderId,
-              broadcastId: broadcast._id,
-              seen: false,
-              sent: false,
-              companyId: req.consumer.consumerId.companyId
-            })
-              .then(savedpagebroadcast => {
-                batchApi(req.body.payload, subscriber.senderId, page, sendBroadcast, subscriber.firstName, subscriber.lastName, res, index, subscribers.length, 'NON_PROMOTIONAL_SUBSCRIPTION')
-              })
-              .catch(error => {
-                return res.status(500).json({status: 'failed', payload: `Failed to create page_broadcast ${JSON.stringify(error)}`})
-              })
+      subscribers.forEach((subscriber, index) => {
+        // update broadcast sent field
+        dataLayer.createForBroadcastPage({
+          pageId: page.pageId,
+          userId: req.consumer.consumerId.userId,
+          subscriberId: subscriber.senderId,
+          broadcastId: broadcast._id,
+          seen: false,
+          sent: false,
+          companyId: req.consumer.consumerId.companyId
+        })
+          .then(savedpagebroadcast => {
+            batchApi(req.body.payload, subscriber.senderId, page, sendBroadcast, subscriber.firstName, subscriber.lastName, res, index, subscribers.length, 'NON_PROMOTIONAL_SUBSCRIPTION')
           })
-        })
-        .catch(error => {
-          return res.status(500).json({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
-        })
+          .catch(error => {
+            return res.status(500).json({status: 'failed', payload: `Failed to create page_broadcast ${JSON.stringify(error)}`})
+          })
+      })
     })
     .catch(error => {
       return res.status(500).json({status: 'failed', payload: `Failed to fetch subscribers ${JSON.stringify(error)}`})
@@ -75,4 +84,59 @@ const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLe
   const form = r.form()
   form.append('access_token', page.accessToken)
   form.append('batch', batchMessages)
+}
+
+function updatePayload (body, page) {
+  return new Promise((resolve, reject) => {
+    console.log('in updatePayload', body.payload)
+    let payload = body.payload
+    for (let i = 0; i < payload.length; i++) {
+      if (payload[i].componentType.toLowerCase() !== 'text') {
+        payload[i] = uploadFileOnFaceBook(payload[i], page)
+      }
+      if (i === payload.length - 1) {
+        console.log('resolve payload', payload)
+        resolve({payload: payload})
+      }
+    }
+  })
+}
+function uploadFileOnFaceBook (payload, page) {
+  let updatedPayload = payload
+  needle.get(
+    `https://graph.facebook.com/v2.10/${page.pageId}?fields=access_token&access_token=${page.userId.facebookInfo.fbToken}`,
+    (err, resp2) => {
+      if (err) {
+        console.log('error in fetching page access_token', JSON.stringify(err))
+      }
+      let pageAccessToken = resp2.body.access_token
+      let fileReaderStream = fs.createReadStream(payload.fileurl)
+      const messageData = {
+        'message': JSON.stringify({
+          'attachment': {
+            'type': payload.componentType.toLowerCase(),
+            'payload': {
+              'is_reusable': true
+            }
+          }
+        }),
+        'filedata': fileReaderStream
+      }
+      request(
+        {
+          'method': 'POST',
+          'json': true,
+          'formData': messageData,
+          'uri': 'https://graph.facebook.com/v2.6/me/message_attachments?access_token=' + pageAccessToken
+        },
+        function (err, resp) {
+          if (err) {
+            console.log('error in uploading attachment on facebook', JSON.stringify(err))
+          } else {
+            console.log('response from uploading attachment', JSON.stringify(resp.body))
+            updatedPayload.attachment_id = resp.body.attachment_id
+            return updatedPayload
+          }
+        })
+    })
 }

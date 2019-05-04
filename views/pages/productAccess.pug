@@ -39,7 +39,7 @@ html(lang='en')
                       span(class='m-switch m-switch--icon m-switch--success')
                         label
                           if consumer.scope.kiboengage
-                            input(type='checkbox' name='' checked class='switch-btn' id='KE' onchange=`changeProductStatus(e, ${JSON.stringify(consumer)})`)
+                            input(type='checkbox' name='' checked class='switch-btn' id='KE' onchange=`changeProductStatus(${JSON.stringify(consumer)})`)
                           else
                             input(type='checkbox' name='' class='switch-btn' id='KE' onchange=`changeProductStatus(${JSON.stringify(consumer)})`)
                           span

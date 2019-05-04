@@ -1,7 +1,6 @@
 const _ = require('lodash')
 
 exports.validateInput = (body) => {
-  console.log('validateInput', body)
   if (!_.has(body, 'payload')) return false
   if (!_.has(body, 'title')) return false
   if (!_.has(body, 'pageId')) return false
