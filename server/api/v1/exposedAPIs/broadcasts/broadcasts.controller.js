@@ -40,7 +40,6 @@ exports.sendBroadcast = function (req, res) {
 const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page) => {
   utility.callApi(`subscribers/query`, 'post', subscriberFindCriteria, req.headers.consumer_id)
     .then(subscribers => {
-      console.log('subscribers found', subscribers)
       if (subscribers.length < 1) {
         return res.status(500).json({status: 'failed', description: `No subscribers match the selected criteria`})
       }

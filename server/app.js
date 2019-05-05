@@ -16,7 +16,7 @@ mongoose.connect(config.mongo.uri, config.mongo.options)
 // require('./config/setup')(appObj, config)
 // require('./routes')(appObj)
 
-const swaggerDoc = require('./config/swagger/kibopush.json')
+const swaggerDoc = require('./config/swagger/new_kibopush.json')
 
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
