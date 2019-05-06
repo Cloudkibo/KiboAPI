@@ -55,7 +55,7 @@ const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page) =>
           companyId: req.consumer.consumerId.companyId
         })
           .then(savedpagebroadcast => {
-            batchApi(req.body.payload, subscriber.senderId, page, sendBroadcast, subscriber.firstName, subscriber.lastName, res, index, subscribers.length, 'NON_PROMOTIONAL_SUBSCRIPTION')
+            batchApi(req.body.payload, subscriber.senderId, page, sendBroadcast, subscriber.firstName, subscriber.lastName, res, index, subscribers.length, 'NON_PROMOTIONAL_SUBSCRIPTION', broadcast._id)
           })
           .catch(error => {
             return res.status(500).json({status: 'failed', payload: `Failed to create page_broadcast ${JSON.stringify(error)}`})
@@ -66,7 +66,7 @@ const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page) =>
       return res.status(500).json({status: 'failed', payload: `Failed to fetch subscribers ${JSON.stringify(error)}`})
     })
 }
-const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLength, testBroadcast) => {
+const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLength, broadcastId) => {
   const r = request.post('https://graph.facebook.com', (err, httpResponse, body) => {
     if (err) {
       return res.status(500).json({
@@ -76,9 +76,14 @@ const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLe
     }
     console.log('response body', body)
     console.log('subscribersLength', subscribersLength)
-    if (testBroadcast || (subscriberNumber === (subscribersLength - 1))) {
+    if ((subscriberNumber === (subscribersLength - 1))) {
       return res.status(200)
-        .json({status: 'success', description: 'Broadcast sent successfully!'})
+        .json({status: 'success',
+          payload: {
+            _id: broadcastId,
+            description: 'Broadcast sent successfully!'
+          }
+        })
     }
   })
   const form = r.form()
@@ -94,8 +99,8 @@ function updatePayload (body, page) {
     for (let i = 0; i < payload.length; i++) {
       if (payload[i].componentType.toLowerCase() !== 'text') {
         url = uploadFileOnServer(payload[i], page)
-        console.log('url', url)
-        payload[i] = uploadFileOnFaceBook(payload[i], page, url)
+        console.log('url uploaded', url)
+        // payload[i] = uploadFileOnFaceBook(payload[i], page, url)
       }
       if (i === payload.length - 1) {
         console.log('resolve payload', payload)

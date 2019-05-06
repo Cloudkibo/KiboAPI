@@ -5,13 +5,13 @@ const auth = require('./auth/auth.service')
 module.exports = function (app) {
   const env = app.get('env')
   // Exposed API middlewares go here
-  app.use('/api/livechat', require('./api/v1/kibochat/liveChat'))
+  // app.use('/api/livechat', require('./api/v1/kibochat/liveChat'))
   app.use('/api/sessions', require('./api/v1/kibochat/sessions'))
   app.use('/api/bots', require('./api/v1/kibochat/smartReplies'))
   app.use('/api/automationQueue', require('./api/v1/kiboengage/automationQueue'))
   app.use('/api/autoposting', require('./api/v1/kiboengage/autoposting'))
   app.use('/api/autoposting_messages', require('./api/v1/kiboengage/autopostingMessages'))
-  app.use('/api/broadcasts', require('./api/v1/kiboengage/broadcasts'))
+  // app.use('/api/broadcasts', require('./api/v1/kiboengage/broadcasts'))
   app.use('/api/post', require('./api/v1/kiboengage/commentCapture'))
   app.use('/api/lists', require('./api/v1/kiboengage/lists'))
   app.use('/api/menu', require('./api/v1/kiboengage/menu'))
@@ -27,6 +27,7 @@ module.exports = function (app) {
   //  exposed APIs
   app.use('/api/pages', require('./api/v1/exposedAPIs/pages'))
   app.use('/api/broadcasts', require('./api/v1/exposedAPIs/broadcasts'))
+  app.use('/api/livechat', require('./api/v1/exposedAPIs/livechat'))
 
   // internal API
   app.use('/api/consumers', require('./api/v1/consumers'))

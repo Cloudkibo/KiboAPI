@@ -22,6 +22,14 @@ exports.validateInput = (body) => {
           }
         }
       }
+      if (body.payload[i].componentType === 'image' ||
+        body.payload[i].componentType === 'video' ||
+        body.payload[i].componentType === 'audio' ||
+        body.payload[i].componentType === 'file') {
+        if (body.payload[i].fileurl === undefined ||
+            body.payload[i].fileurl === '') return false
+      }
+
       if (body.payload[i].componentType === 'card') {
         if (body.payload[i].title === undefined ||
           body.payload[i].title === '') return false
@@ -130,7 +138,7 @@ function validateUrl (str) {
   }
 }
 /* eslint-disable */
-exports.batchApi = (payload, recipientId, page, sendBroadcast, fname, lname, res, subscriberNumber, subscribersLength, fbMessageTag, testBroadcast) => {
+exports.batchApi = (payload, recipientId, page, sendBroadcast, fname, lname, res, subscriberNumber, subscribersLength, fbMessageTag, broadcastId ) => {
   let recipient = "recipient=" + encodeURIComponent(JSON.stringify({"id": recipientId}))
   let tag = "tag=" + encodeURIComponent(fbMessageTag)
   let messagingType = "messaging_type=" + encodeURIComponent("MESSAGE_TAG")
@@ -143,7 +151,7 @@ exports.batchApi = (payload, recipientId, page, sendBroadcast, fname, lname, res
       batch.push({ "method": "POST", "name": `message${index + 1}`, "depends_on": `message${index}`, "relative_url": "v2.6/me/messages", "body": recipient + "&" + message + "&" + messagingType +  "&" + tag})
     }
     if (index === (payload.length - 1)) {
-      sendBroadcast(JSON.stringify(batch), page, res, subscriberNumber, subscribersLength, testBroadcast)
+      sendBroadcast(JSON.stringify(batch), page, res, subscriberNumber, subscribersLength, broadcastId)
     }
   })
 }

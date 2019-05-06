@@ -1,0 +1,262 @@
+---
+swagger: '2.0'
+
+################################################################################
+#                              API Information                                 #
+################################################################################
+info:
+  version: v1
+  title: KiboPush API
+  description: |
+    Welcome to the KiboPush API documentation! Our API provides flexible tools that can be used in the creation of new, outstanding projects.
+    Please note that this documentation refers to the API 1.0 version. API 2.0 version is currently under construction and will be released soon.
+
+    Build something great!
+
+    ## Basic Usage
+    All KiboPush API requests start with `https://kiboapi.cloudkibo.com/api/`
+
+    The next segment of the URI path depends on the type of request. For example:
+
+    `https://kiboapi.cloudkibo.com/api/users/`
+
+    to get information of logged in user.
+
+    ## Authentication
+    In order for client application to call our API, he/she would have to attach the following information to the http headers:
+
+      * app_id (the API key)
+      * app_secret (the API key secret)
+
+
+    ## Error Handling
+    Errors are returned using standard HTTP error code syntax. In general, codes in the 2xx range indicate success, codes in the 4xx range indicate an error (bad or missing parameters, not authenticated etc.), and codes in the 5xx range indicate an error with KiboPush’s servers. Any additional info is included in the body of the return call, JSON-formatted.
+
+  termsOfService: http://www.kibopush.com/privacy-policy
+
+################################################################################
+#                  Host, Base Path, Schemes and Content Types                  #
+################################################################################
+host: kiboapi.cloudkibo.com
+basePath: /api
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+
+################################################################################
+#                                  Security                                    #
+################################################################################
+securityDefinitions:
+  apiKey:
+    type: apiKey
+    in: header
+    name: app_id
+  apiSecret:
+    type: apiKey
+    in: header
+    name: app_secret
+security:
+  - apiKey: []
+    apiSecret: []
+
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+  /pages:
+    get:
+      description: gives all the connected pages of a user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: The id of the page in KiboPush
+                    pageId:
+                      type: string
+                      description: Facebook id of the page
+                    pageName:
+                      type: string
+                      description: Name of the page
+                    connected:
+                      type: boolean
+                      description: Whether this page is connected to kibopush or not
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+        '401':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response401'
+
+  /broadcasts/sendBroadcast:
+    post:
+      description: sends a broadcast to all the subscribers of the page
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: broadcast
+          in: body
+          required: true
+          description: Broadcast Details
+          schema:
+            $ref: '#/definitions/Broadcast'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The _id of the created broadcast
+                  description:
+                    type: string
+                    description: Broadcast sent successfully
+
+        '401':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response401'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+
+  /livechat/sendMessage:
+    post:
+      description: sends a message to a subscriber
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: chat
+          in: body
+          required: true
+          description: Message Details
+          schema:
+            $ref: '#/definitions/Chat'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The _id of the created broadcast
+                  description:
+                    type: string
+                    description: Broadcast sent successfully
+
+        '401':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response401'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+
+############################################################################
+#                                 Definitions                                  #
+################################################################################
+
+definitions:
+
+  Broadcast:
+    type: object
+    properties:
+      pageId:
+        type: string
+        description: The _id of the page to send broadcast from
+      title:
+        type: string
+        description: title of the broadcast
+      payload:
+        type: array
+        items:
+          type: object
+        description: The content to send
+      segmentationGender:
+        type: string
+        description: 'male, female or other'
+
+  Chat:
+    type: object
+    properties:
+      pageId:
+        type: string
+        description: The _id of the page to send message from
+      subscriberId:
+        type: string
+        description: The _id of the subscriber to send message to
+      payload:
+        type: object
+        description: The content to send
+
+  Response500:
+    type: object
+    properties:
+      status:
+        type: string
+        description: failed
+      description:
+        type: string
+        description: Internal server error
+
+  Response401:
+    type: object
+    properties:
+      status:
+        type: string
+        description: failed
+      description:
+        type: string
+        description: Unauthorized to perform this action
+
+  Response400:
+    type: object
+    properties:
+      status:
+        type: string
+        description: failed
+      description:
+        type: string
+        description: Parameters are missing
