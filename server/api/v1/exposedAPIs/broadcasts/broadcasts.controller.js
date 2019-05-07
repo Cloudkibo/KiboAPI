@@ -77,17 +77,23 @@ const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLe
         status: 'failed',
         description: `Failed to send broadcast ${JSON.stringify(err)}`
       })
-    }
-    console.log('response body', body)
-    console.log('subscribersLength', subscribersLength)
-    if ((subscriberNumber === (subscribersLength - 1))) {
-      return res.status(200)
-        .json({status: 'success',
-          payload: {
-            _id: broadcastId,
-            description: 'Broadcast sent successfully!'
-          }
-        })
+    } else if (body.code !== 200) {
+      return res.status(500).json({
+        status: 'failed',
+        description: `Failed to send broadcast ${JSON.stringify(body)}`
+      })
+    } else {
+      console.log('response body', body)
+      console.log('subscribersLength', subscribersLength)
+      if ((subscriberNumber === (subscribersLength - 1))) {
+        return res.status(200)
+          .json({status: 'success',
+            payload: {
+              _id: broadcastId,
+              description: 'Broadcast sent successfully!'
+            }
+          })
+      }
     }
   })
   const form = r.form()

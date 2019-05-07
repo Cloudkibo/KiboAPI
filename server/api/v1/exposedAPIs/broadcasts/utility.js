@@ -206,7 +206,7 @@ function prepareMessageData (body, fname, lname) {
       'attachment': {
         'type': body.componentType,
         'payload': {
-          'attachment_id': body.fileurl.attachment_id
+          'attachment_id': body.attachment_id
         }
       }
     }
@@ -233,7 +233,7 @@ function prepareMessageData (body, fname, lname) {
             'elements': [
               {
                 'title': body.title,
-                'image_url': body.image_url,
+                'image_url': body.fileurl,
                 'subtitle': body.description,
                 'buttons': body.buttons,
                 'default_action': body.default_action
@@ -251,7 +251,7 @@ function prepareMessageData (body, fname, lname) {
             'elements': [
               {
                 'title': body.title,
-                'image_url': body.image_url,
+                'image_url': body.fileurl,
                 'subtitle': body.description,
                 'buttons': body.buttons
               }
@@ -266,7 +266,7 @@ function prepareMessageData (body, fname, lname) {
       for (var g = 0; g < body.cards.length; g++) {
         var card = body.cards[g]
         var galleryCard = {}
-        galleryCard.image_url = card.image_url
+        galleryCard.image_url = card.fileurl
         galleryCard.title = card.title
         galleryCard.buttons = card.buttons
         galleryCard.subtitle = card.subtitle
@@ -305,7 +305,7 @@ function prepareMessageData (body, fname, lname) {
           'template_type': 'media',
           'elements': [
             {
-              'attachment_id': body.fileurl.attachment_id,
+              'attachment_id': body.attachment_id,
               'media_type': body.mediaType,
               'buttons': body.buttons
             }
