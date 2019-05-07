@@ -72,19 +72,19 @@ const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page, pa
 }
 const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLength, broadcastId) => {
   const r = request.post('https://graph.facebook.com', (err, httpResponse, body) => {
+    console.log('response body', body)
+    console.log('subscribersLength', subscribersLength)
     if (err) {
       return res.status(500).json({
         status: 'failed',
         description: `Failed to send broadcast ${JSON.stringify(err)}`
       })
-    } else if (body.code !== 200) {
+    } else if ((body[0] && body[0].code !== 200) || (!body[0] && body.code !== 200)) {
       return res.status(500).json({
         status: 'failed',
         description: `Failed to send broadcast ${JSON.stringify(body)}`
       })
     } else {
-      console.log('response body', body)
-      console.log('subscribersLength', subscribersLength)
       if ((subscriberNumber === (subscribersLength - 1))) {
         return res.status(200)
           .json({status: 'success',
