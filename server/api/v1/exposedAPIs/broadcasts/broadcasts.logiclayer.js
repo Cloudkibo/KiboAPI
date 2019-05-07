@@ -1,8 +1,8 @@
 let _ = require('lodash')
 
-exports.prepareBroadCastPayload = (req) => {
+exports.prepareBroadCastPayload = (req, payload) => {
   let broadcastPayload = {
-    payload: req.body.payload,
+    payload: payload,
     userId: req.consumer.consumerId.userId,
     companyId: req.consumer.consumerId.companyId,
     title: req.body.title,
