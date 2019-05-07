@@ -128,8 +128,7 @@ function uploadFileOnFaceBook (payload, page) {
               'url': payload.fileurl
             }
           }
-        }),
-        'filedata': fileReaderStream
+        })
       }
       request(
         {
