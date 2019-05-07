@@ -18,18 +18,21 @@ exports.sendMessage = function (req, res) {
               subscriber = subscriber[0]
               dataLayer.createForChat(logicLayer.prepareFbMessageObject(req.body, page.pageId, subscriber.senderId, req.consumer.consumerId.companyId, user))
                 .then(message => {
-                  let error = sendMessage(req.body.payload, page, subscriber)
-                  if (!error) {
-                    return res.status(200)
-                      .json({status: 'success',
-                        payload: {
-                          _id: message._id,
-                          description: 'Message sent successfully!'
-                        }
-                      })
-                  } else {
-                    return res.status(500).json({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
-                  }
+                  sendMessage(req.body.payload, page, subscriber)
+                    .then(result => {
+                      console.log('result at the end then', result)
+                      return res.status(200)
+                        .json({status: 'success',
+                          payload: {
+                            _id: message._id,
+                            description: 'Message sent successfully!'
+                          }
+                        })
+                    })
+                    .catch(error => {
+                      console.log('result at the end in catch', error)
+                      return res.status(500).json({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
+                    })
                 })
                 .catch(error => {
                   return res.status(500).json({status: 'failed', payload: `Failed to create chat ${JSON.stringify(error)}`})
@@ -48,29 +51,31 @@ exports.sendMessage = function (req, res) {
     })
 }
 function sendMessage (payload, page, subscriber) {
-  let messageData = logicLayer.prepareSendAPIPayload(
-    subscriber.senderId,
-    payload,
-    subscriber.firstName,
-    subscriber.lastName
-  )
-  console.log('messageData in sendMessage', JSON.stringify(messageData))
-  request(
-    {
-      'method': 'POST',
-      'json': true,
-      'formData': messageData,
-      'uri': 'https://graph.facebook.com/v2.6/me/messages?access_token=' +
-        page.accessToken
-    },
-    (err, res) => {
-      console.log('response from fbb', JSON.stringify(res))
-      if (err) {
-        return err
-      } else if (res.statusCode !== 200) {
-        return res.body
-      } else {
-        return false
-      }
-    })
+  return new Promise((resolve, reject) => {
+    let messageData = logicLayer.prepareSendAPIPayload(
+      subscriber.senderId,
+      payload,
+      subscriber.firstName,
+      subscriber.lastName
+    )
+    console.log('messageData in sendMessage', JSON.stringify(messageData))
+    request(
+      {
+        'method': 'POST',
+        'json': true,
+        'formData': messageData,
+        'uri': 'https://graph.facebook.com/v2.6/me/messages?access_token=' +
+          page.accessToken
+      },
+      (err, res) => {
+        console.log('response from fbb', JSON.stringify(res))
+        if (err) {
+          reject(err)
+        } else if (res.statusCode !== 200) {
+          reject(res.body)
+        } else {
+          resolve()
+        }
+      })
+  })
 }
