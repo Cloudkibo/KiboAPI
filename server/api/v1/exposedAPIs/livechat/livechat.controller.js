@@ -67,6 +67,8 @@ function sendMessage (payload, page, subscriber) {
       console.log('response from fbb', JSON.stringify(res))
       if (err) {
         return err
+      } else if (res.statusCode !== 200) {
+        return res.body
       } else {
         return false
       }
