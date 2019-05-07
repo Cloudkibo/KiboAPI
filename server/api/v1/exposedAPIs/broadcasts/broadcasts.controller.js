@@ -73,6 +73,7 @@ const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page, pa
 const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLength, broadcastId) => {
   const r = request.post('https://graph.facebook.com', (err, httpResponse, body) => {
     console.log('response body', body)
+    console.log('httpResponse', httpResponse)
     console.log('subscribersLength', subscribersLength)
     if (err) {
       return res.status(500).json({
