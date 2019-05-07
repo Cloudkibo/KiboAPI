@@ -20,7 +20,6 @@ exports.sendMessage = function (req, res) {
                 .then(message => {
                   sendMessage(req.body.payload, page, subscriber)
                     .then(result => {
-                      console.log('result at the end then', result)
                       return res.status(200)
                         .json({status: 'success',
                           payload: {
@@ -30,7 +29,6 @@ exports.sendMessage = function (req, res) {
                         })
                     })
                     .catch(error => {
-                      console.log('result at the end in catch', error)
                       return res.status(500).json({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
                     })
                 })

@@ -98,9 +98,9 @@ function updatePayload (body, page) {
     let payload = body.payload
     for (let i = 0; i < payload.length; i++) {
       if (payload[i].componentType.toLowerCase() !== 'text') {
-        url = uploadFileOnServer(payload[i], page)
-        console.log('url uploaded', url)
-        // payload[i] = uploadFileOnFaceBook(payload[i], page, url)
+        // url = uploadFileOnServer(payload[i], page)
+        // console.log('url uploaded', url)
+        payload[i] = uploadFileOnFaceBook(payload[i], page, url)
       }
       if (i === payload.length - 1) {
         console.log('resolve payload', payload)
@@ -124,7 +124,8 @@ function uploadFileOnFaceBook (payload, page) {
           'attachment': {
             'type': payload.componentType.toLowerCase(),
             'payload': {
-              'is_reusable': true
+              'is_reusable': true,
+              'url': payload.fileurl
             }
           }
         }),
