@@ -48,14 +48,19 @@ exports.sendMessage = function (req, res) {
       return res.status(500).json({status: 'failed', payload: `Failed to fetch user ${JSON.stringify(error)}`})
     })
 }
-function sendMessage (payload, page, subscriber) {
+function sendMessage (payload, page, subscriber, refId) {
   return new Promise((resolve, reject) => {
-    let messageData = logicLayer.prepareSendAPIPayload(
-      subscriber.senderId,
-      payload,
-      subscriber.firstName,
-      subscriber.lastName
-    )
+    let messageData
+    if (subscriber) {
+      messageData = logicLayer.prepareSendAPIPayload(
+        subscriber.senderId,
+        payload,
+        subscriber.firstName,
+        subscriber.lastName
+      )
+    } else {
+      messageData = logicLayer.prepareSendAPIPayloadForRef(refId, payload)
+    }
     console.log('messageData in sendMessage', JSON.stringify(messageData))
     request(
       {
@@ -76,4 +81,35 @@ function sendMessage (payload, page, subscriber) {
         }
       })
   })
+}
+exports.sendMessageUsingRefId = function (req, res) {
+  if (!logicLayer.validateInput(req.body, true)) {
+    return res.status(400)
+      .json({status: 'failed', description: 'Please fill all the required fields'})
+  }
+  utility.callApi(`user/query`, 'post', {_id: req.consumer.consumerId.userId}, req.headers.consumer_id)
+    .then(user => {
+      utility.callApi(`pages/query`, 'post', {_id: req.body.pageId}, req.headers.consumer_id)
+        .then(page => {
+          page = page[0]
+          sendMessage(req.body.payload, page, null, req.body.subscriberId)
+            .then(result => {
+              return res.status(200)
+                .json({status: 'success',
+                  payload: {
+                    description: 'Message sent successfully!'
+                  }
+                })
+            })
+            .catch(error => {
+              return res.status(500).json({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
+            })
+        })
+        .catch(error => {
+          return res.status(500).json({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
+        })
+    })
+    .catch(error => {
+      return res.status(500).json({status: 'failed', payload: `Failed to fetch user ${JSON.stringify(error)}`})
+    })
 }
