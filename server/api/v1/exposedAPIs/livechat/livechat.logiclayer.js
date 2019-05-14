@@ -1,6 +1,4 @@
 const _ = require('lodash')
-const fs = require('fs')
-const path = require('path')
 
 exports.validateInput = (body) => {
   if (!_.has(body, 'payload')) return false
@@ -85,6 +83,43 @@ exports.prepareSendAPIPayload = (subscriberId, body, fname, lname) => {
       'messaging_type': messageType,
       'recipient': JSON.stringify({
         'id': subscriberId
+      }),
+      'message': JSON.stringify({
+        'attachment': {
+          'type': body.componentType,
+          'payload': {
+            'url': body.fileurl,
+            'is_reusable': true
+          }
+        }
+      })
+    }
+    return payload
+  }
+  return payload
+}
+exports.prepareSendAPIPayloadForRef = (refId, body) => {
+  let messageType = 'RESPONSE'
+  let payload = {}
+  let text = body.text
+  if (body.componentType === 'text') {
+    payload = {
+      'messaging_type': messageType,
+      'recipient': JSON.stringify({
+        'user_ref': refId
+      }),
+      'message': JSON.stringify({
+        'text': text,
+        'metadata': 'SENT_FROM_KIBOPUSH'
+      })
+    }
+    return payload
+  } else if (['image', 'audio', 'file', 'video'].indexOf(
+    body.componentType) > -1) {
+    payload = {
+      'messaging_type': messageType,
+      'recipient': JSON.stringify({
+        'user_ref': refId
       }),
       'message': JSON.stringify({
         'attachment': {

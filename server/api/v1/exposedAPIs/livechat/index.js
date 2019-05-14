@@ -9,4 +9,8 @@ router.post('/sendMessage',
   auth.isAuthenticatedExternal('kibochat'),
   controller.sendMessage)
 
+router.post('/sendMessageUsingRefId',
+  auth.isAuthenticatedExternal('kibochat'),
+  controller.sendMessage)
+
 module.exports = router
