@@ -194,6 +194,49 @@ paths:
           schema:
              $ref: '#/definitions/Response500'
 
+  /livechat/sendMessageUsingRefId:
+    post:
+      description: sends a message to a customer using ref id given during optin
+      consumes:
+          - application/json
+          - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: chat
+          in: body
+          required: true
+          description: Message Details
+          schema:
+            $ref: '#/definitions/Chat'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+               type: string
+               description: success
+              payload:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The _id of the created broadcast
+                  description:
+                    type: string
+                    description: Broadcast sent successfully
+
+        '401':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response401'
+        '500':
+          description: failed
+          schema:
+             $ref: '#/definitions/Response500'
+
 ############################################################################
 #                                 Definitions                                  #
 ################################################################################
