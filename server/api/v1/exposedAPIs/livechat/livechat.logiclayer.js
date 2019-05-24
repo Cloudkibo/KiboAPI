@@ -20,10 +20,10 @@ exports.validateInput = (body) => {
         body.payload.fileurl === '') return false
   }
 
-  if (body.payload.componentType !== 'image' ||
-  body.payload.componentType !== 'video' ||
-  body.payload.componentType !== 'audio' ||
-  body.payload.componentType !== 'file' ||
+  if (body.payload.componentType !== 'image' &&
+  body.payload.componentType !== 'video' &&
+  body.payload.componentType !== 'audio' &&
+  body.payload.componentType !== 'file' &&
   body.payload.componentType !== 'text') {
     return false
   }
