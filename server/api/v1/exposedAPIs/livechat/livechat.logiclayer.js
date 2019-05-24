@@ -28,7 +28,7 @@ exports.prepareFbMessageObject = (body, pageId, senderId, companyId, user) => {
     recipient_id: body.subscriberId, // this is the subscriber id: _id of subscriberId
     sender_fb_id: pageId, // this is the (facebook) :page id of pageId
     recipient_fb_id: senderId, // this is the (facebook) subscriber id : pageid of subscriber id
-    session_id: body.subscriberId,
+    subscriber_id: body.subscriberId,
     company_id: companyId, // this is admin id till we have companies
     payload: body.payload, // this where message content will go
     status: 'unseen', // seen or unseen
