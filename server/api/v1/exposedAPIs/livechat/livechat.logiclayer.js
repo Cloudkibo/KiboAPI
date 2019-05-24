@@ -19,6 +19,15 @@ exports.validateInput = (body) => {
     if (body.payload.fileurl === undefined ||
         body.payload.fileurl === '') return false
   }
+
+  if (body.payload.componentType !== 'image' ||
+  body.payload.componentType !== 'video' ||
+  body.payload.componentType !== 'audio' ||
+  body.payload.componentType !== 'file' ||
+  body.payload.componentType !== 'text') {
+    return false
+  }
+
   return true
 }
 
