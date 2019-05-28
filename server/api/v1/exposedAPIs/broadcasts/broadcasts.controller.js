@@ -143,7 +143,7 @@ function uploadFileOnFaceBook (payload, page) {
         const messageData = {
           'message': JSON.stringify({
             'attachment': {
-              'type': payload.componentType.toLowerCase(),
+              'type': payload.componentType === 'media' ? payload.mediaType.toLowerCase : payload.componentType.toLowerCase(),
               'payload': {
                 'is_reusable': true,
                 'url': payload.fileurl

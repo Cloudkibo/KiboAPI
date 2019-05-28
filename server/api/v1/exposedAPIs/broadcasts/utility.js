@@ -46,8 +46,8 @@ exports.validateInput = (body) => {
           body.payload[i].title === '') return false
         if (body.payload[i].fileurl === undefined ||
           body.payload[i].fileurl === '') return false
-        if (body.payload[i].description === undefined ||
-          body.payload[i].description === '') return false
+        if (body.payload[i].subtitle === undefined ||
+          body.payload[i].subtitle === '') return false
         if (body.payload[i].buttons === undefined) return false
         if (body.payload[i].buttons.length === 0) return false
         if (!validateUrl(body.payload[i].fileurl)) return false
@@ -63,6 +63,8 @@ exports.validateInput = (body) => {
           body.payload[i].fileurl === '') return false
         if (body.payload[i].mediaType === undefined ||
           body.payload[i].mediaType === '') return false
+        if (body.payload[i].mediaType !== 'video' &&
+          body.payload[i].mediaType !== 'image') return false
         for (let j = 0; j < body.payload[i].buttons.length; j++) {
           if (body.payload[i].buttons[j].type === 'web_url') {
             if (!validateUrl(
@@ -247,7 +249,7 @@ function prepareMessageData (body, fname, lname) {
               {
                 'title': body.title,
                 'image_url': body.fileurl,
-                'subtitle': body.description,
+                'subtitle': body.subtitle,
                 'buttons': body.buttons,
                 'default_action': body.default_action
               }
@@ -265,7 +267,7 @@ function prepareMessageData (body, fname, lname) {
               {
                 'title': body.title,
                 'image_url': body.fileurl,
-                'subtitle': body.description,
+                'subtitle': body.subtitle,
                 'buttons': body.buttons
               }
             ]
