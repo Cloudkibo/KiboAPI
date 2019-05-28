@@ -9,7 +9,18 @@ exports.validateInput = (body) => {
     return false
   } else {
     for (let i = 0; i < body.payload.length; i++) {
-      if (body.payload[i].componentType === undefined) return false
+      if (body.payload[i].componentType === undefined || body.payload[i].componentType === '') return false
+
+      if (body.payload[i].componentType !== 'text' &&
+      body.payload[i].componentType !== 'image' &&
+      body.payload[i].componentType !== 'video' &&
+      body.payload[i].componentType !== 'audio' &&
+      body.payload[i].componentType !== 'file' &&
+      body.payload[i].componentType !== 'card' &&
+      body.payload[i].componentType !== 'media' &&
+      body.payload[i].componentType !== 'gallery' &&
+      body.payload[i].componentType !== 'list') return false
+
       if (body.payload[i].componentType === 'text') {
         if (body.payload[i].text === undefined ||
           body.payload[i].text === '') return false
