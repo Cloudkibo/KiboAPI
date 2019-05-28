@@ -102,7 +102,7 @@ function updatePayload (body, page) {
     let url = ''
     let payload = body.payload
     for (let i = 0; i < payload.length; i++) {
-      if (payload[i].componentType.toLowerCase() !== 'text') {
+      if (payload[i].componentType.toLowerCase() === 'media') {
         // url = uploadFileOnServer(payload[i], page)
         // console.log('url uploaded', url)
         uploadFileOnFaceBook(payload[i], page, url)
