@@ -73,8 +73,6 @@ exports.validateInput = (body) => {
         }
       }
       if (body.payload[i].componentType === 'gallery') {
-        console.log('in gallery')
-        console.log('payload[i]', body.payload[i].cards)
         if (body.payload[i].cards === undefined) return false
         if (body.payload[i].cards.length === 0) return false
         for (let j = 0; j < body.payload[i].cards.length; j++) {
