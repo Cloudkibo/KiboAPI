@@ -161,6 +161,13 @@
             "required": true
           },
           {
+            "name": "actionType",
+            "in": "formData",
+            "description": "Whether autpost tweets to Facebook or Messenger",
+            "type": "string",
+            "required": true
+          },
+          {
             "name": "accountTitle",
             "in": "formData",
             "description": "The title of subscription i.e. Facebook page, Twitter Account or Youtube Channel",
@@ -11002,6 +11009,9 @@
         "userId": {
           "type": "string"
         },
+        "subscribersCount": {
+          "type": "number"
+        },
         "datetime": {
           "type": "string",
           "description": "Date and time when this record was created.",
@@ -11805,6 +11815,11 @@
           "type": "boolean",
           "description": "Whether this autoposting is segmented or not",
           "default": false
+        },
+        "actionType": {
+          "type": "string",
+          "description": "Whether to autopost tweets to Facebook or Messenger",
+          "default": "messenger"
         },
         "segmentationPageIds": {
           "type": "array",
