@@ -152,6 +152,28 @@ paths:
           description: The type of subscription i.e. facebook, twitter or youtube
           type: string
           required: true
+        - name: actionType
+          in: formData
+          description: Whether autpost tweets to Facebook or Messenger
+          type: string
+          required: true
+        - name: filterTweets
+          in: formData
+          description: Whether filter tweet is enabled or not
+          type: boolean
+          required: true
+        - name: filterTags
+          in: formData
+          description: Array of filter tags
+          type: array
+          items:
+            type: string
+          required: true
+        - name: moderateTweets
+          in: formData
+          description: Whether tweet moderation is enabled or not
+          type: boolean
+          required: true
         - name: accountTitle
           in: formData
           description: The title of subscription i.e. Facebook page, Twitter Account or Youtube Channel
@@ -3077,7 +3099,6 @@ paths:
         '200':
           description: OK
           schema:
-            type: object
             $ref: '#/definitions/Subscriber'
         '404':
           description: failed
@@ -7460,6 +7481,8 @@ definitions:
         description: The timezone of the subscriber to send broadcast to
       userId:
         type: string
+      subscribersCount:
+        type: number
       datetime:
         type: string
         description: Date and time when this record was created.
@@ -8066,6 +8089,27 @@ definitions:
         type: boolean
         description: Whether this autoposting is segmented or not
         default: false
+      actionType:
+        type: string
+        description: Whether to autopost tweets to Facebook or Messenger
+        default: 'messenger'
+      filterTweets:
+        type: boolean
+        description: Whether filter tweet is enabled or not
+        default: false
+      filterTags:
+        type: array
+        items:
+          type: string
+        description: Array of filter tags
+        default: []
+      moderateTweets:
+        type: boolean
+        description: Whether tweet moderation is enabled or not
+        default: false
+      approvalChannel:
+        type: object
+        description: Channel info to send approval message
       segmentationPageIds:
         type: array
         items:
