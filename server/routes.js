@@ -28,6 +28,7 @@ module.exports = function (app) {
   app.use('/api/pages', require('./api/v1/exposedAPIs/pages'))
   app.use('/api/broadcasts', require('./api/v1/exposedAPIs/broadcasts'))
   app.use('/api/livechat', require('./api/v1/exposedAPIs/livechat'))
+  app.use('/api/user', require('./api/v1/exposedAPIs/user'))
 
   // internal API
   app.use('/api/consumers', require('./api/v1/consumers'))

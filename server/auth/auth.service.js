@@ -20,7 +20,7 @@ function isAuthenticated () {
   return compose()
   // Validate jwt or api keys
     .use((req, res, next) => {
-      if (req.headers.hasOwnProperty('app_id')) {
+      if (req.headers.hasOwnProperty('api_key')) {
         validateApiKeys(req, res, next)
       } else {
         // allow access_token to be passed through query parameter as well
@@ -102,6 +102,43 @@ function validateApiKeys (req, res, next) {
     })
 }
 
+function authenticateUser (req, res, next) {
+  return compose()
+  // Validate jwt or api keys
+    .use((req, res, next) => {
+      if (req.headers.hasOwnProperty('api_secret') && req.headers.hasOwnProperty('api_key')) {
+        let credentials = {
+          'api_key': req.headers['api_key'],
+          'api_secret': req.headers['api_secret']
+        }
+        ConsumersDataLayer.findOne({credentials})
+          .then(consumer => {
+            if (consumer) {
+              req.consumer = consumer
+              next()
+            } else {
+              return res.status(401).json({
+                status: 'failed',
+                description: 'Unauthorized. Please provide correct api_key and api_secret in headers.'
+              })
+            }
+          })
+          .catch(err => {
+            return res.status(401).json({
+              status: 'failed ' + err,
+              description: 'Unauthorized. Please provide both api_key and api_secret in headers.'
+            })
+          }
+          )
+      } else {
+        return res.status(401).json({
+          status: 'failed',
+          description: 'Unauthorized. Please provide both api_key and api_secret in headers.'
+        })
+      }
+    })
+}
+
 function isAuthenticatedExternal (product) {
   return compose()
   // Validate jwt or api keys
@@ -143,6 +180,6 @@ function isAuthenticatedExternal (product) {
       }
     })
 }
-
+exports.authenticateUser = authenticateUser
 exports.isAuthenticated = isAuthenticated
 exports.isAuthenticatedExternal = isAuthenticatedExternal
