@@ -142,11 +142,6 @@ paths:
           description: The unique id of the autopost to edit
           type: string
           required: true
-        - name: subscriptionUrl
-          in: formData
-          description: The url of facebook page, twitter account or youtube channel
-          type: string
-          required: true
         - name: subscriptionType
           in: formData
           description: The type of subscription i.e. facebook, twitter or youtube
@@ -176,7 +171,7 @@ paths:
           required: true
         - name: accountTitle
           in: formData
-          description: The title of subscription i.e. Facebook page, Twitter Account or Youtube Channel
+          description: The title of subscription i.e. Facebook page, Twitter Account, Wordspress Channel or RSS Feed
           type: string
           required: true
         - name: segmentationPageIds
@@ -205,6 +200,16 @@ paths:
           type: boolean
           required: true
           default: true
+        - name: scheduledInterval
+          in: formData
+          description: When to send rss feeds
+          type: string
+          required: true
+        - name: approvalChannel
+          in: formData
+          description: When to send rss feeds
+          type: string
+          required: true
       responses:
         '200':
           description: OK
@@ -8133,6 +8138,10 @@ definitions:
       segmentationTimeZone:
         type: string
         description: The timezone of the subscriber to send autoposting to
+      scheduledInterval:
+        type: string
+        description: When to send RSS Feeds
+        default: '24 hours'
   LiveChat:
     type: object
     description: This table is used to store all the chats information
