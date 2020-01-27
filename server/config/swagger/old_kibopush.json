@@ -10859,6 +10859,219 @@
           }
         }
       }
+    },
+    "/overlayWidgets/delete/:id": {
+      "delete": {
+        "description": "Deletes a particular overlay widget",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/overlayWidgets/create": {
+      "post": {
+        "description": "creates a new overlay widget",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "OverlayWidget",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/OverlayWidget"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "$ref": "#/definitions/OverlayWidget"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/overlayWidgets/fetchWidgets": {
+      "post": {
+        "description": "Fetches the widgets of a company",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "last_id",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "number_of_records",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "first_page",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "page_value",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "status_value",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "type_value",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "requested_page",
+            "in": "formData",
+            "type": "number"
+          },
+          {
+            "name": "current_page",
+            "in": "formData",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "overlayWidgets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/OverlayWidget"
+                      }
+                    },
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
+    },
+    "/overlayWidgets/update/:id": {
+      "post": {
+        "description": "Updates an overlay widget",
+        "consumes": [
+          "application/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "OverlayWidget",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/OverlayWidget"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "success"
+                },
+                "payload": {
+                  "type": "object",
+                  "$ref": "#/definitions/OverlayWidget"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "failed",
+            "schema": {
+              "$ref": "#/definitions/Response500"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -13904,6 +14117,102 @@
         "hasChat": {
           "type": "boolean",
           "description": "whether this contact has chat messages or not"
+        }
+      }
+    },
+    "OverlayWidget": {
+      "type": "object",
+      "description": "This table is used to store overlay widgets",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "uique id of the record",
+          "readOnly": true
+        },
+        "title": {
+          "type": "string",
+          "description": "title of the widget"
+        },
+        "companyId": {
+          "type": "string",
+          "description": "id of the company",
+          "readOnly": true
+        },
+        "userId": {
+          "type": "string",
+          "description": "id of the user",
+          "readOnly": true
+        },
+        "pageId": {
+          "type": "string",
+          "description": "id of the page for which this widget is created"
+        },
+        "widgetType": {
+          "type": "string",
+          "description": "type of widget"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "whether this widget is active or not"
+        },
+        "initialState": {
+          "type": "object",
+          "description": "initial state of the widget",
+          "properties": {
+            "button_type": {
+              "type": "string"
+            },
+            "background_color": {
+              "type": "string"
+            },
+            "headline_color": {
+              "type": "string"
+            },
+            "button_background": {
+              "type": "string"
+            },
+            "button_text": {
+              "type": "string"
+            },
+            "headline": {
+              "type": "string"
+            }
+          }
+        },
+        "optInMessage": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "message to send"
+        },
+        "submittedState": {
+          "type": "object",
+          "properties": {
+            "action_type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "headline_color": {
+              "type": "string"
+            },
+            "background_color": {
+              "type": "string"
+            },
+            "button_background": {
+              "type": "string"
+            },
+            "button_text_color": {
+              "type": "string"
+            }
+          }
+        },
+        "datetime": {
+          "type": "string",
+          "description": "date and time at which this widget is created",
+          "readOnly": true
         }
       }
     },
