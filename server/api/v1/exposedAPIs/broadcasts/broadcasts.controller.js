@@ -133,7 +133,7 @@ function uploadFileOnFaceBook (payload, page) {
   return new Promise((resolve, reject) => {
     let updatedPayload = payload
     needle.get(
-      `https://graph.facebook.com/v2.10/${page.pageId}?fields=access_token&access_token=${page.userId.facebookInfo.fbToken}`,
+      `https://graph.facebook.com/v6.0/${page.pageId}?fields=access_token&access_token=${page.userId.facebookInfo.fbToken}`,
       (err, resp2) => {
         if (err) {
           console.log('error in fetching page access_token', JSON.stringify(err))
@@ -156,7 +156,7 @@ function uploadFileOnFaceBook (payload, page) {
             'method': 'POST',
             'json': true,
             'formData': messageData,
-            'uri': 'https://graph.facebook.com/v2.6/me/message_attachments?access_token=' + pageAccessToken
+            'uri': 'https://graph.facebook.com/v6.0/me/message_attachments?access_token=' + pageAccessToken
           },
           function (err, resp) {
             console.log('response from uploading attachment', JSON.stringify(resp.body))
