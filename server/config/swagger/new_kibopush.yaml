@@ -273,7 +273,150 @@ definitions:
       payload:
         type: object
         description: The content to send
-
+  CHAT_MESSAGE:
+    type: object
+    properties:
+      from:
+        type: string
+        description: This can be one of the following:'kibopush', 'facebook_page', 'subscriber'. When value is 'facebook_page', it means the message was sent from Facebook page inbox
+      recipientId:
+        type: string
+        description: When message is from 'kibopush' or 'facebook_page', this will be the id of the Facebook Page Subscriber. When it is from subscriber, this will be Facebook Page Id
+      senderId:
+        type: string
+        description: When message is from kibopush or facebook_page, this will be the id of the Facebook Page. When message is from subscriber, this will be Facebook Page Subscriber Id.
+      timestamp:
+        type: string
+        description: Timestamp at which the message is sent or received.
+      message:
+        type: object
+        description: The payload of the chat message
+    
+  NEW_SUBSCRIBER:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the subscriber
+      locale:
+        type: string
+        description: Locale of the user on Facebook. For supported locale codes visit 'https://developers.facebook.com/docs/messenger-platform/messenger-profile/supported-locales'
+      timezone:
+        type: string
+        description: Timezone, number relative to GMT.
+      gender:
+        type: string
+        description: Gender of the subscriber.
+      psid:
+        type: string
+        description: Facebook Page Subscriber Id
+      profilePic:
+        type: string
+        description: Url to the Facebook profile picture. 
+      pageId:
+        type: string
+        description: Facebook Page Id
+      source:
+        type: string
+        description: Which source the subscriber is coming. This can be either of the following:'chat_plugin', 'direct_message', 'customer_matching', 'messeger_ref_url', 'checkbox_plugin', 'landing_page', 'comment_capture'
+      subscriberRefId:
+        type: string
+        description: This is the unique ref id of the subscriber given by Facebook. This will only be available when source is 'checkbox_plugin'
+      timestamp:
+        type: string
+        description: Timestamp at which this subscriber got created.
+      siteInfo:
+        type: object
+        description: This will contain extra information of the subscribers who are coming from messenger chat plugin.This will only be available when source is 'chat_plugin'.
+      livechatUrl:
+        type: string
+        description: Url to access live chat of the subscriber
+        
+  CHATBOT_OPTION_SELECTED:
+    type: object
+    properties:
+      psid:
+        type: string
+        description: Facebook Page Subscriber Id
+      pageId:
+        type: string
+        description: Id of the Facebook Page on which chatbot is published
+      blockTitle:
+        type: string
+        description: Title of the block whose option subscriber has selected
+      option:
+        type: string
+        description: The option subscriber has selected
+      chatbotTitle:
+        type: string
+        description: Title of the chatbot
+      timestamp:
+        type: string
+        description: Timestamp at which the option is selected
+        
+  SESSION_ASSIGNED:
+    type: object
+    properties:
+      psid:
+        type: string
+        description: Facebook Page Subscriber Id
+      pageId:
+        type: string
+        description: Facebook page Id
+      assignedTo:
+        type: string
+        description: To whom this session is assigned to. This can either be a team or agent.
+      name:
+        type: string
+        description: Name of the assignee. Either team name or agent name
+      assignedBy:
+        type: string
+        description: Name of the agent who has assigned this session
+      timestamp:
+        type: string
+        description: Timestamp at which session is assigned
+      
+  SESSION_UNASSIGNED:
+    type: object
+    properties:
+      psid:
+        type: string
+        description: Facebook Page Subscriber Id
+      pageId:
+        type: string
+        description: Facebook page Id
+      unassigned:
+        type: string
+        description: To whom this session is unassigned from. This can either be a team or agent
+      name:
+        type: string
+        description: Name of the assignee. Either team name or agent name
+      unassignedBy:
+        type: string
+        description: Name of the agent who has unassigned this session
+      timestamp:
+        type: string
+        description: Timestamp at which session is unassigned
+        
+  CHECKBOX_OPTIN:
+    type: object
+    properties:
+      subscriberRefId:
+        type: string
+        description: When the first time a customer fills the form on a website and checks the checkbox, Facebook will only send us this ref id that can be used to send a message to the customer. Next time, when the customer replies to our message, we will be able to match our form ref id with subscriber’s ref id to know who that person was who filled the form using checkbox. Ecommerce owners should store this ref id in their system against each order record or customer record depending on their business logic. Next time, when the customer who filled the form responds on Messenger, you will get all the facebook information of that customer along with ref id so that you can compile the whole information.
+      cartId:
+        type: string
+        description: Cart id is fetched from the commerce provider where the checkbox plugin is installed. In case of shopify, it uses SDK on the client to fetch the cart id. The ecommerce vendor will provide the logic to set its value at setup of checkbox on their cart.
+      type:
+        type: string
+        description: Value for this is 'checkbox' so our server knows this postback value is coming from checkbox
+      industry:
+        type: string
+        description: Industry is the value that will be setup by customer on their website when installing the checkbox plugin on the form. For ecommerce websites, its value should be 'commerce'. For now, we have not experimented checkbox plugin with other verticals than ecommerce.
+      timestamp:
+        type: string
+        description: Timestamp at which checkbox was opted in.
+     
   Response500:
     type: object
     properties:
