@@ -25,10 +25,10 @@ module.exports = function (app) {
   app.use('/product', require('./api/v1/product/'))
 
   //  exposed APIs
-  app.use('/api/pages', require('./api/v1/exposedAPIs/pages'))
+  /* app.use('/api/pages', require('./api/v1/exposedAPIs/pages'))
   app.use('/api/broadcasts', require('./api/v1/exposedAPIs/broadcasts'))
   app.use('/api/livechat', require('./api/v1/exposedAPIs/livechat'))
-  app.use('/api/user', require('./api/v1/exposedAPIs/user'))
+  app.use('/api/user', require('./api/v1/exposedAPIs/user')) */
 
   // internal API
   app.use('/api/consumers', require('./api/v1/consumers'))
@@ -52,20 +52,6 @@ module.exports = function (app) {
     console.log('Request', req.cookies)
     res.clearCookie('token')
     redirectToLogoutAccounts(req, res)
-  })
-
-  app.route('/:url(api|auth)/*').get((req, res) => {
-    res.status(404).send({url: `${req.originalUrl} not found`})
-  }).post((req, res) => {
-    res.status(404).send({url: `${req.originalUrl} not found`})
-  })
-
-  app.route('/*').get((req, res) => {
-    console.log('Route 2')
-    res.redirect('/')
-  }).post((req, res) => {
-    console.log('Route 3')
-    res.redirect('/')
   })
 }
 

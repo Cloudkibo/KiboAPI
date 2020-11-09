@@ -1,4 +1,4 @@
-const utility = require('../../utility')
+const utility = require('../utility')
 
 exports.index = function (req, res) {
   let query = [

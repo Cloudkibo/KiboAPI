@@ -3,7 +3,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development' // production
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('./config/environment/index')
-const swaggerTools = require('swagger-tools')
+const swaggerTools = require('oas-tools')
 
 const app = express()
 const httpApp = express()
@@ -18,7 +18,12 @@ mongoose.connect(config.mongo.uri, config.mongo.options)
 
 const swaggerDoc = require('./config/swagger/new_kibopush.json')
 
-swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+swaggerTools.configure({
+  controllers: `${__dirname}/api/v1/exposedAPIs/`,
+  swaggerUI: `${__dirname}/config/swagger/new_kibopush.json`,
+  useStubs: true
+})
+swaggerTools.initializeMiddleware(swaggerDoc, appObj, function (middleware) {
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   // app.use(middleware.swaggerMetadata());
 

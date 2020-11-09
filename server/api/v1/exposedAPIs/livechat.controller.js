@@ -1,6 +1,6 @@
-const utility = require('../../utility')
-const logicLayer = require('./livechat.logiclayer')
-const dataLayer = require('./livechat.datalayer')
+const utility = require('../utility')
+const logicLayer = require('./livechat/livechat.logiclayer')
+const dataLayer = require('./livechat/livechat.datalayer')
 let request = require('request')
 
 exports.sendMessage = function (req, res) {
