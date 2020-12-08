@@ -9,7 +9,7 @@ const needle = require('needle')
 exports.sendBroadcast = function (req, res) {
   if (!validateInput(req.body)) {
     return res.status(400)
-      .json({status: 'failed', description: 'Please fill all the required fields'})
+      .send({status: 'failed', description: 'Please fill all the required fields'})
   }
   utility.callApi(`pages/query`, 'post', {_id: req.body.pageId}, req.headers.consumer_id)
     .then(page => {
@@ -27,23 +27,23 @@ exports.sendBroadcast = function (req, res) {
               }, 3000)
             })
             .catch(error => {
-              return res.status(500).json({status: 'failed', payload: `Failed to create broadcast ${JSON.stringify(error)}`})
+              return res.status(500).send({status: 'failed', payload: `Failed to create broadcast ${JSON.stringify(error)}`})
             })
         })
         .catch(error => {
           console.log('in updatedPayload catch', error)
-          return res.status(500).json({status: 'failed', payload: `Failed to upload attachment on facebook ${JSON.stringify(error)}`})
+          return res.status(500).send({status: 'failed', payload: `Failed to upload attachment on facebook ${JSON.stringify(error)}`})
         })
     })
     .catch(error => {
-      return res.status(500).json({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
+      return res.status(500).send({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
     })
 }
 const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page, payload) => {
   utility.callApi(`subscribers/query`, 'post', subscriberFindCriteria, req.headers.consumer_id)
     .then(subscribers => {
       if (subscribers.length < 1) {
-        return res.status(500).json({status: 'failed', description: `No subscribers match the selected criteria`})
+        return res.status(500).send({status: 'failed', description: `No subscribers match the selected criteria`})
       }
       subscribers.forEach((subscriber, index) => {
         // update broadcast sent field
@@ -60,12 +60,12 @@ const sendToSubscribers = (subscriberFindCriteria, req, res, broadcast, page, pa
             batchApi(payload, subscriber.senderId, page, sendBroadcast, subscriber.firstName, subscriber.lastName, res, index, subscribers.length, 'NON_PROMOTIONAL_SUBSCRIPTION', broadcast._id)
           })
           .catch(error => {
-            return res.status(500).json({status: 'failed', payload: `Failed to create page_broadcast ${JSON.stringify(error)}`})
+            return res.status(500).send({status: 'failed', payload: `Failed to create page_broadcast ${JSON.stringify(error)}`})
           })
       })
     })
     .catch(error => {
-      return res.status(500).json({status: 'failed', payload: `Failed to fetch subscribers ${JSON.stringify(error)}`})
+      return res.status(500).send({status: 'failed', payload: `Failed to fetch subscribers ${JSON.stringify(error)}`})
     })
 }
 const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLength, broadcastId) => {
@@ -74,14 +74,14 @@ const sendBroadcast = (batchMessages, page, res, subscriberNumber, subscribersLe
     console.log('httpResponse', httpResponse)
     console.log('subscribersLength', subscribersLength)
     if (err) {
-      return res.status(500).json({
+      return res.status(500).send({
         status: 'failed',
         description: `Failed to send broadcast ${JSON.stringify(err)}`
       })
     }
     if ((subscriberNumber === (subscribersLength - 1))) {
       return res.status(200)
-        .json({status: 'success',
+        .send({status: 'success',
           payload: {
             _id: broadcastId,
             description: 'Broadcast sent successfully!'

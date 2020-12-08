@@ -16,7 +16,50 @@ const ConsumersDataLayer = require('../api/v1/consumers/consumers.datalayer')
  * Attaches the user object to the request if authenticated
  * Otherwise returns 403
  */
-function isAuthenticated () {
+function handleAppId (req, secDef, token, next) {
+  req.headers['api_key'] = token
+  next()
+}
+
+function handleAppSecret (req, secDef, token, next) {
+  req.headers['api_secret'] = token
+  validateKeys(req)
+    .then(res => {
+      next()
+    })
+    .catch(err => {
+      return req.res.status(401).send({
+        status: 'failed ',
+        description: `Unauthorized. ${err.message}`
+      })
+    })
+}
+const validateKeys = (req) => {
+  return new Promise((resolve, reject) => {
+    if (req.headers.hasOwnProperty('api_secret') && req.headers.hasOwnProperty('api_key')) {
+      let credentials = {
+        'api_key': req.headers['api_key'],
+        'api_secret': req.headers['api_secret']
+      }
+      ConsumersDataLayer.findOne({credentials})
+        .then(consumer => {
+          if (consumer) {
+            req.consumer = consumer
+            resolve('resolve')
+          } else {
+            reject(new Error('Incorrect credentials. User not found'))
+          }
+        })
+        .catch(err => {
+          reject(err)
+        })
+    } else {
+      reject(new Error('Please provide both api_key and api_secret in headers.'))
+    }
+  })
+}
+
+function isAuthenticated (req, secDef, token, next) {
   return compose()
   // Validate jwt or api keys
     .use((req, res, next) => {
@@ -111,8 +154,10 @@ function authenticateUser (req, res, next) {
           'api_key': req.headers['api_key'],
           'api_secret': req.headers['api_secret']
         }
+        console.log('In auth user')
         ConsumersDataLayer.findOne({credentials})
           .then(consumer => {
+            console.log('Consumer', consumer)
             if (consumer) {
               req.consumer = consumer
               next()
@@ -183,3 +228,5 @@ function isAuthenticatedExternal (product) {
 exports.authenticateUser = authenticateUser
 exports.isAuthenticated = isAuthenticated
 exports.isAuthenticatedExternal = isAuthenticatedExternal
+exports.handleAppSecret = handleAppSecret
+exports.handleAppId = handleAppId

@@ -6,7 +6,7 @@ let request = require('request')
 exports.sendMessage = function (req, res) {
   if (!logicLayer.validateInput(req.body)) {
     return res.status(400)
-      .json({status: 'failed', description: 'Please fill all the required fields'})
+      .send({status: 'failed', description: 'Please fill all the required fields'})
   }
   utility.callApi(`user/query`, 'post', {_id: req.consumer.consumerId.userId}, req.headers.consumer_id)
     .then(user => {
@@ -29,23 +29,23 @@ exports.sendMessage = function (req, res) {
                         })
                     })
                     .catch(error => {
-                      return res.status(500).json({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
+                      return res.status(500).send({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
                     })
                 })
                 .catch(error => {
-                  return res.status(500).json({status: 'failed', payload: `Failed to create chat ${JSON.stringify(error)}`})
+                  return res.status(500).send({status: 'failed', payload: `Failed to create chat ${JSON.stringify(error)}`})
                 })
             })
             .catch(error => {
-              return res.status(500).json({status: 'failed', payload: `Failed to fetch subscriber ${JSON.stringify(error)}`})
+              return res.status(500).send({status: 'failed', payload: `Failed to fetch subscriber ${JSON.stringify(error)}`})
             })
         })
         .catch(error => {
-          return res.status(500).json({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
+          return res.status(500).send({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
         })
     })
     .catch(error => {
-      return res.status(500).json({status: 'failed', payload: `Failed to fetch user ${JSON.stringify(error)}`})
+      return res.status(500).send({status: 'failed', payload: `Failed to fetch user ${JSON.stringify(error)}`})
     })
 }
 function sendMessage (payload, page, subscriber, refId) {
@@ -85,7 +85,7 @@ function sendMessage (payload, page, subscriber, refId) {
 exports.sendMessageUsingRefId = function (req, res) {
   if (!logicLayer.validateInput(req.body, true)) {
     return res.status(400)
-      .json({status: 'failed', description: 'Please fill all the required fields'})
+      .send({status: 'failed', description: 'Please fill all the required fields'})
   }
   utility.callApi(`user/query`, 'post', {_id: req.consumer.consumerId.userId}, req.headers.consumer_id)
     .then(user => {
@@ -95,21 +95,21 @@ exports.sendMessageUsingRefId = function (req, res) {
           sendMessage(req.body.payload, page, null, req.body.subscriberId)
             .then(result => {
               return res.status(200)
-                .json({status: 'success',
+                .send({status: 'success',
                   payload: {
                     description: 'Message sent successfully!'
                   }
                 })
             })
             .catch(error => {
-              return res.status(500).json({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
+              return res.status(500).send({status: 'failed', payload: `Failed to send chat ${JSON.stringify(error)}`})
             })
         })
         .catch(error => {
-          return res.status(500).json({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
+          return res.status(500).send({status: 'failed', payload: `Failed to fetch page ${JSON.stringify(error)}`})
         })
     })
     .catch(error => {
-      return res.status(500).json({status: 'failed', payload: `Failed to fetch user ${JSON.stringify(error)}`})
+      return res.status(500).send({status: 'failed', payload: `Failed to fetch user ${JSON.stringify(error)}`})
     })
 }
