@@ -4,7 +4,6 @@ exports.validateInput = (body) => {
   if (!_.has(body, 'payload')) return false
   if (!_.has(body, 'pageId')) return false
   if (!_.has(body, 'subscriberId')) return false
-
   if (body.payload.componentType === undefined || body.payload.componentType === '') return false
 
   if (body.payload.componentType === 'text') {

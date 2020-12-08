@@ -16,9 +16,9 @@ info:
 
     The next segment of the URI path depends on the type of request. For example:
 
-    `https://kiboapi.cloudkibo.com/api/users/`
+    `https://kiboapi.cloudkibo.com/api/pages/`
 
-    to get information of logged in user.
+    to get information of conected pages
 
     ## Authentication
 
@@ -208,57 +208,52 @@ paths:
     post:
       operationId: 'createWebhook'
       description: subscribes a client to receive event information
-      parameters:
-        - name: webhook_url
-          in: query
-          required: true
-          description: |
-            the location where data will be sent.  Must be network accessible by the source server
-          schema:
-            type: string
-            format: uri
-            example: https://tonys-server.com
-        - name: token
-          in: query
-          required: true
-          description: |
-            This is a token that will be defined in your code inside the method that handles the callback url. KiboPush will pass this verify token as a request parameter. Your method should check if the correct token is being received to validate if the request is trusted
-          schema:
-            example: VERIFY_ME
-        - name: optIn
-          in: query
-          required: true
-          description: |
-            These are the subscribed event for which real time updates will be received.
-          schema:
-            type: object
-            example: {  CHATBOT_OPTION_SELECTED: true,
-                        CHAT_MESSAGE: true,
-                        CHECKBOX_OPTIN: true,
-                        NEW_SUBSCRIBER: true,
-                        SESSION_ASSIGNED: true,
-                        SESSION_UNASSIGNED: true,
-                      }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                pageId:  
+                  type: string
+                token:
+                  type: string
+                optIn:
+                  type: object
       responses:
-        '201':
-          description: 'success'
+        "201":
+          description: OK
           content:
             application/json:
               schema:
-                description: webhook information
-                required:
-                  - webhookId
+                type: object
                 properties:
-                  webhookId:
-                    description: this unique identifier allows management of the webhooks
+                  status:
                     type: string
-                    example: '5f911f4328db5e7f03b7379f'
+                    description: success
+                  payload:
+                    type: object
+                    description: "The payload of the created webhook"
+        "401":
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response401"
+        "500":
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response500"      
       callbacks:
         # the name `onData` is a convenience locator
         CHAT_MESSAGE:
           # when data is sent, it will be sent to the `callbackUrl` provided
           # when making the subscription PLUS the suffix `/data`
-          '{$request.query.callbackUrl}/chat_message':
+          'chat_message':
             post:
               requestBody:
                 description: subscription payload
@@ -267,18 +262,14 @@ paths:
                     schema:
                       $ref: "#/components/schemas/CHAT_MESSAGE"
               responses:
-                '202':
+                '200':
                   description: |
                     Your server implementation should return this HTTP status code
                     if the data was received successfully
-                '204':
-                  description: |
-                    Your server should return this HTTP status code if no longer interested
-                    in further updates
         NEW_SUBSCRIBER:
           # when data is sent, it will be sent to the `callbackUrl` provided
           # when making the subscription PLUS the suffix `/data`
-          '{$request.query.callbackUrl}/new_subscriber':
+          'new_subscriber':
             post:
               requestBody:
                 description: subscription payload
@@ -287,18 +278,14 @@ paths:
                     schema:
                       $ref: "#/components/schemas/NEW_SUBSCRIBER"
               responses:
-                '202':
+                '200':
                   description: |
                     Your server implementation should return this HTTP status code
                     if the data was received successfully
-                '204':
-                  description: |
-                    Your server should return this HTTP status code if no longer interested
-                    in further updates
         CHATBOT_OPTION_SELECTED:
           # when data is sent, it will be sent to the `callbackUrl` provided
           # when making the subscription PLUS the suffix `/data`
-          '{$request.query.callbackUrl}/chatbot_option_selected':
+          'chatbot_option_selected':
             post:
               requestBody:
                 description: subscription payload
@@ -307,18 +294,14 @@ paths:
                     schema:
                       $ref: "#/components/schemas/CHATBOT_OPTION_SELECTED"
               responses:
-                '202':
+                '200':
                   description: |
                     Your server implementation should return this HTTP status code
                     if the data was received successfully
-                '204':
-                  description: |
-                    Your server should return this HTTP status code if no longer interested
-                    in further updates
         SESSION_ASSIGNED:
           # when data is sent, it will be sent to the `callbackUrl` provided
           # when making the subscription PLUS the suffix `/data`
-          '{$request.query.callbackUrl}/session_assigned':
+          'session_assigned':
             post:
               requestBody:
                 description: subscription payload
@@ -327,18 +310,14 @@ paths:
                     schema:
                       $ref: "#/components/schemas/SESSION_ASSIGNED"
               responses:
-                '202':
+                '200':
                   description: |
                     Your server implementation should return this HTTP status code
                     if the data was received successfully
-                '204':
-                  description: |
-                    Your server should return this HTTP status code if no longer interested
-                    in further updates
         SESSION_UNASSIGNED:
           # when data is sent, it will be sent to the `callbackUrl` provided
           # when making the subscription PLUS the suffix `/data`
-          '{$request.query.callbackUrl}/session_unassigned':
+          'session_unassigned':
             post:
               requestBody:
                 description: subscription payload
@@ -347,18 +326,14 @@ paths:
                     schema:
                       $ref: "#/components/schemas/SESSION_UNASSIGNED"
               responses:
-                '202':
+                '200':
                   description: |
                     Your server implementation should return this HTTP status code
                     if the data was received successfully
-                '204':
-                  description: |
-                    Your server should return this HTTP status code if no longer interested
-                    in further updates
         CHECKBOX_OPTIN:
           # when data is sent, it will be sent to the `callbackUrl` provided
           # when making the subscription PLUS the suffix `/data`
-          '{$request.query.callbackUrl}/checkbox_optin':
+          'checkbox_optin':
             post:
               requestBody:
                 description: subscription payload
@@ -367,17 +342,156 @@ paths:
                     schema:
                       $ref: "#/components/schemas/CHECKBOX_OPTIN"
               responses:
-                '202':
+                '200':
                   description: |
                     Your server implementation should return this HTTP status code
                     if the data was received successfully
-                '204':
+ /webhooks/edit:
+    x-swagger-router-controller: webhooks.controller
+    post:
+      operationId: 'editWebhook'
+      description: subscribes a client to receive event information
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                webhook_id:  
+                  type: string
+                token:
+                  type: string
+                optIn:
+                  type: object
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: success
+                  payload:
+                    type: object
+                    description: "The payload of the created webhook"
+        "401":
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response401"
+        "500":
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response500"      
+      callbacks:
+        # the name `onData` is a convenience locator
+        CHAT_MESSAGE:
+          # when data is sent, it will be sent to the `callbackUrl` provided
+          # when making the subscription PLUS the suffix `/data`
+          'chat_message':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                   application/json:
+                    schema:
+                      $ref: "#/components/schemas/CHAT_MESSAGE"
+              responses:
+                '200':
                   description: |
-                    Your server should return this HTTP status code if no longer interested
-                    in further updates
+                    Your server implementation should return this HTTP status code
+                    if the data was received successfully
+        NEW_SUBSCRIBER:
+          # when data is sent, it will be sent to the `callbackUrl` provided
+          # when making the subscription PLUS the suffix `/data`
+          'new_subscriber':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/NEW_SUBSCRIBER"
+              responses:
+                '200':
+                  description: |
+                    Your server implementation should return this HTTP status code
+                    if the data was received successfully
+        CHATBOT_OPTION_SELECTED:
+          # when data is sent, it will be sent to the `callbackUrl` provided
+          # when making the subscription PLUS the suffix `/data`
+          'chatbot_option_selected':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/CHATBOT_OPTION_SELECTED"
+              responses:
+                '200':
+                  description: |
+                    Your server implementation should return this HTTP status code
+                    if the data was received successfully
+        SESSION_ASSIGNED:
+          # when data is sent, it will be sent to the `callbackUrl` provided
+          # when making the subscription PLUS the suffix `/data`
+          'session_assigned':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/SESSION_ASSIGNED"
+              responses:
+                '200':
+                  description: |
+                    Your server implementation should return this HTTP status code
+                    if the data was received successfully
+        SESSION_UNASSIGNED:
+          # when data is sent, it will be sent to the `callbackUrl` provided
+          # when making the subscription PLUS the suffix `/data`
+          'session_unassigned':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/SESSION_UNASSIGNED"
+              responses:
+                '200':
+                  description: |
+                    Your server implementation should return this HTTP status code
+                    if the data was received successfully
+        CHECKBOX_OPTIN:
+          # when data is sent, it will be sent to the `callbackUrl` provided
+          # when making the subscription PLUS the suffix `/data`
+          'checkbox_optin':
+            post:
+              requestBody:
+                description: subscription payload
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/CHECKBOX_OPTIN"
+              responses:
+                '200':
+                  description: |
+                    Your server implementation should return this HTTP status code
+                    if the data was received successfully
 
 servers:
-  - url: https://kiboapi.cloudkibo.com/api
+  - url: http://localhost:3023/api
 components:
   requestBodies:
     Chat:
