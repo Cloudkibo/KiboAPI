@@ -681,7 +681,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3023/api"
+      "url": "https://kiboapi.cloudkibo.com/api"
     }
   ],
   "components": {
